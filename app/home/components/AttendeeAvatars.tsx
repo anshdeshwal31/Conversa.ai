@@ -17,7 +17,7 @@ function AttendeeAvatars({ attendees, getAttendeeList, getInitials }: AttendeeAv
           className='relative group'
           title={attendee}
         >
-          <div className='w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 border-2 border-background flex items-center justify-center text-white text-xs font-medium hover:scale-110 transition-transform cursor-pointer'>
+          <div className='w-6 h-6 rounded-full bg-white/[0.14] border-2 border-background flex items-center justify-center text-white text-xs font-medium hover:scale-110 transition-transform cursor-pointer'>
             {getInitials(attendee)}
           </div>
           <div className='absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10'>

@@ -105,7 +105,7 @@ model UserIntegration {
   projectId   String?
   projectName String?
   workspaceId String?
-  domain      String?
+  // domain      String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

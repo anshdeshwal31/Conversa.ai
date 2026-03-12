@@ -45,6 +45,7 @@ export async function GET(request: NextRequest) {
             update: {
                 accessToken: tokenData.access_token,
                 refreshToken: tokenData.refresh_token,
+                expiresAt: new Date(Date.now() + tokenData.expires_in * 1000),
                 updatedAt: new Date()
             },
             create: {
@@ -52,6 +53,7 @@ export async function GET(request: NextRequest) {
                 platform: 'asana',
                 accessToken: tokenData.access_token,
                 refreshToken: tokenData.refresh_token,
+                expiresAt: new Date(Date.now() + tokenData.expires_in * 1000),
             }
         })
 

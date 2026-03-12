@@ -110,8 +110,8 @@ function ActionItems({
 
     if (!integrationsLoaded) {
         return (
-            <div className='bg-card rounded-lg p-6 border border-border mb-8'>
-                <h3 className='text-lg font-semibold text-foreground mb-4'>
+            <div className='glass-card p-6 mb-8'>
+                <h3 className='text-lg font-semibold text-white mb-4'>
                     Action Items
                 </h3>
 
@@ -119,11 +119,11 @@ function ActionItems({
                     {actionItems.map((item) => (
                         <div key={item.id} className='group relative'>
                             <div className='flex items-center gap-3'>
-                                <p className='flex-1 text-sm leading-relaxed text-foreground'>
+                                <p className='flex-1 text-sm leading-relaxed text-gray-300'>
                                     {item.text}
                                 </p>
                                 <div className='animate-pulse'>
-                                    <div className='h-6 w-20 bg-muted rounded'></div>
+                                    <div className='h-6 w-20 bg-white/[0.06] rounded'></div>
                                 </div>
 
                                 <Button
@@ -140,7 +140,7 @@ function ActionItems({
                     ))}
 
                     <div className='animate-pulse'>
-                        <div className='h-8 bg-muted rounded-lg'></div>
+                        <div className='h-8 bg-white/[0.06] rounded-lg'></div>
                     </div>
 
                 </div>
@@ -150,8 +150,8 @@ function ActionItems({
     }
 
     return (
-        <div className='bg-card rounded-lg p-6 border border-border mb-8'>
-            <h3 className='text-lg font-semibold text-foreground mb-4'>
+        <div className='glass-card p-6 mb-8'>
+            <h3 className='text-lg font-semibold text-white mb-4'>
                 Action Items
             </h3>
 
@@ -172,9 +172,9 @@ function ActionItems({
             />
 
             {!hasConnectedIntegrations && actionItems.length > 0 && (
-                <div className='mt-4 p-3 bg-muted/30 rounded-lg border border-dashed border-muted-foreground/30'>
-                    <p className='text-xs text-muted-foreground text-center'>
-                        <a href="/integrations" className='text-primary hover:underline'>
+                <div className='mt-4 p-3 bg-white/[0.04] rounded-xl border border-dashed border-white/[0.1]'>
+                    <p className='text-xs text-gray-500 text-center'>
+                        <a href="/integrations" className='text-white/80 hover:underline'>
                             Connect Integrations
                         </a> to add action items to your tools
                     </p>

@@ -1,3 +1,4 @@
+import { Bot, User } from 'lucide-react'
 import React from 'react'
 
 interface Message {
@@ -17,27 +18,47 @@ function ChatMessages({
     isLoading
 }: ChatMessagesProps) {
     return (
-        <div className='space-y-4'>
+        <div className='space-y-5'>
             {messages.map((message) => (
                 <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
-                    <div className={`max-w-[70%] rounded-lg p-4 ${message.isBot
-                        ? 'bg-card border border-border text-foreground'
-                        : 'bg-primary text-primary-foreground'
+                    <div className={`flex gap-3 max-w-[75%] ${message.isBot ? 'flex-row' : 'flex-row-reverse'}`}>
+                        {/* Avatar */}
+                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-1 ${
+                            message.isBot
+                                ? 'bg-primary/18 border border-primary/30 text-primary'
+                                : 'bg-accent/25 border border-accent/35 text-accent-foreground'
                         }`}>
-                        <p className='text-sm leading-relaxed'>{message.content}</p>
-
+                            {message.isBot ? <Bot className='w-4 h-4' /> : <User className='w-4 h-4' />}
+                        </div>
+                        {/* Bubble */}
+                        <div className={`rounded-2xl p-4 ${
+                            message.isBot
+                                ? 'glass-card'
+                                : 'bg-[#2b1124]/70 border border-accent/35'
+                        }`}>
+                            <p className='text-sm leading-relaxed text-white/86'>{message.content}</p>
+                        </div>
                     </div>
-
                 </div>
             ))}
 
             {isLoading && (
                 <div className='flex justify-start'>
-                    <div className='bg-card border border-border rounded-lg p-4'>
-                        <p className='text-sm text-muted-foreground'>🤖 Searching through all your meetings...</p>
-
+                    <div className='flex gap-3'>
+                        <div className='w-8 h-8 rounded-xl bg-primary/18 border border-primary/30 flex items-center justify-center flex-shrink-0 mt-1'>
+                            <Bot className='w-4 h-4 text-primary' />
+                        </div>
+                        <div className='glass-card rounded-2xl p-4'>
+                            <div className='flex items-center gap-2'>
+                                <div className='flex gap-1'>
+                                    <div className='w-2 h-2 bg-white/40 rounded-full animate-bounce'></div>
+                                    <div className='w-2 h-2 bg-white/40 rounded-full animate-bounce [animation-delay:150ms]'></div>
+                                    <div className='w-2 h-2 bg-white/40 rounded-full animate-bounce [animation-delay:300ms]'></div>
+                                </div>
+                                <p className='text-sm text-white/40 ml-2'>Searching through all your meetings...</p>
+                            </div>
+                        </div>
                     </div>
-
                 </div>
             )}
 

@@ -4,7 +4,6 @@ import React from 'react'
 import { useMeetingDetail } from './hooks/useMeetingDetail'
 import MeetingHeader from './components/MeetingHeader'
 import MeetingInfo from './components/MeetingInfo'
-import { Button } from '@/components/ui/button'
 import ActionItems from './components/action-items/ActionItems'
 import TranscriptDisplay from './components/TranscriptDisplay'
 import ChatSidebar from './components/ChatSidebar'
@@ -17,7 +16,6 @@ function MeetingDetail() {
         isOwner,
         userChecked,
         chatInput,
-        setChatInput,
         messages,
         showSuggestions,
         activeTab,
@@ -34,7 +32,7 @@ function MeetingDetail() {
     } = useMeetingDetail()
 
     return (
-        <div className='min-h-screen bg-background'>
+        <div className='min-h-screen'>
 
             <MeetingHeader
                 title={meetingData?.title || 'Meeting'}
@@ -44,8 +42,8 @@ function MeetingDetail() {
                 isOwner={isOwner}
                 isLoading={!userChecked}
             />
-            <div className='flex h-[calc(100vh-73px)]'>
-                <div className={`flex-1 p-6 overflow-auto pb-24 ${!userChecked
+            <div className='surface-frame flex h-[calc(100vh-73px)] overflow-hidden'>
+                <div className={`flex-1 p-6 overflow-auto pb-24 ambient-panel ${!userChecked
                     ? ''
                     : !isOwner
                         ? 'max-w-4xl mx-auto'
@@ -54,61 +52,57 @@ function MeetingDetail() {
                     <MeetingInfo meetingData={meetingInfoData} />
 
                     <div className='mb-8'>
-                        <div className='flex border-b border-border'>
-                            <Button
-                                variant='ghost'
+                        <div className='flex border-b border-white/[0.1]'>
+                            <button
                                 onClick={() => setActiveTab('summary')}
-                                className={`px-4 py-2 text-sm font-medium border-b-2 rounded-none shadow-none transition-colors
+                                className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors cursor-pointer
                                 ${activeTab === 'summary'
-                                        ? 'border-primary text-primary'
-                                        : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/50'
+                                    ? 'border-primary text-primary'
+                                        : 'border-transparent text-white/45 hover:text-white/75'
                                     }`}
-                                style={{ boxShadow: 'none' }}
                                 type='button'
                             >
                                 Summary
-                            </Button>
-                            <Button
-                                variant='ghost'
+                            </button>
+                            <button
                                 onClick={() => setActiveTab('transcript')}
-                                className={`px-4 py-2 text-sm font-medium border-b-2 rounded-none shadow-none transition-colors
+                                className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors cursor-pointer
                                 ${activeTab === 'transcript'
-                                        ? 'border-primary text-primary'
-                                        : 'border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/50'
+                                    ? 'border-primary text-primary'
+                                        : 'border-transparent text-white/45 hover:text-white/75'
                                     }`}
-                                style={{ boxShadow: 'none' }}
                                 type='button'
                             >
                                 Transcript
-                            </Button>
+                            </button>
                         </div>
 
                         <div className='mt-6'>
                             {activeTab === 'summary' && (
                                 <div>
                                     {loading ? (
-                                        <div className='bg-card border border-border rounded-lg p-6 text-center'>
-                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4'></div>
-                                            <p className='text-muted-foreground'>Loading meeting data..</p>
+                                        <div className='glass-card p-6 text-center'>
+                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4'></div>
+                                            <p className='text-gray-400'>Loading meeting data..</p>
                                         </div>
                                     ) : meetingData?.processed ? (
                                         <div className='space-y-6'>
                                             {meetingData.summary && (
-                                                <div className='bg-card border border-border rounded-lg p-6'>
-                                                    <h3 className='text-lg font-semibold text-foreground mb-3'>Meeting Summary</h3>
-                                                    <p className='text-muted-foreground leading-relaxed'>
+                                                <div className='glass-card p-6'>
+                                                    <h3 className='text-lg font-semibold text-white mb-3'>Meeting Summary</h3>
+                                                    <p className='text-gray-400 leading-relaxed'>
                                                         {meetingData.summary}
                                                     </p>
                                                 </div>
                                             )}
 
                                             {!userChecked ? (
-                                                <div className='bg-card border border-border rounded-lg p-6'>
+                                                <div className='glass-card p-6'>
                                                     <div className='animate-pulse'>
-                                                        <div className='h-4 bg-muted rounded w-1/4 mb-4'></div>
+                                                        <div className='h-4 bg-white/[0.06] rounded w-1/4 mb-4'></div>
                                                         <div className='space-y-2'>
-                                                            <div className='h-3 bg-muted rounded w-3/4'></div>
-                                                            <div className='h-3 bg-muted rounded w-1/2'></div>
+                                                            <div className='h-3 bg-white/[0.06] rounded w-3/4'></div>
+                                                            <div className='h-3 bg-white/[0.06] rounded w-1/2'></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -124,31 +118,28 @@ function MeetingDetail() {
                                                     )}
 
                                                     {!isOwner && displayActionItems.length > 0 && (
-                                                        <div className='bg-card rounded-lg p-6 border border-border'>
-                                                            <h3 className='text-lg font-semibold text-foreground mb-4'>
+                                                        <div className='glass-card p-6'>
+                                                            <h3 className='text-lg font-semibold text-white mb-4'>
                                                                 Action Items
                                                             </h3>
                                                             <div className='space-y-3'>
                                                                 {displayActionItems.map((item) => (
                                                                     <div key={item.id} className='flex items-start gap-3'>
-                                                                        <div className='w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0'></div>
-                                                                        <p className='text-sm text-foreground'>{item.text}</p>
-
+                                                                        <div className='w-2 h-2 rounded-full bg-white mt-2 flex-shrink-0'></div>
+                                                                        <p className='text-sm text-gray-300'>{item.text}</p>
                                                                     </div>
                                                                 ))}
-
                                                             </div>
-
                                                         </div>
                                                     )}
                                                 </>
                                             )}
                                         </div>
                                     ) : (
-                                        <div className='bg-card border border-border rounded-lg p-6 text-center'>
-                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4'></div>
-                                            <p className='text-muted-foreground'>Processing meeting with AI..</p>
-                                            <p className='text-sm text-muted-foreground mt-2'>You'll receive an email when ready</p>
+                                        <div className='glass-card p-6 text-center'>
+                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4'></div>
+                                            <p className='text-gray-400'>Processing meeting with AI..</p>
+                                            <p className='text-sm text-gray-500 mt-2'>You&apos;ll receive an email when ready</p>
 
                                         </div>
                                     )}
@@ -158,15 +149,15 @@ function MeetingDetail() {
                             {activeTab === 'transcript' && (
                                 <div>
                                     {loading ? (
-                                        <div className='bg-card border border-border rounded-lg p-6 text-center'>
-                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4'></div>
-                                            <p className='text-muted-foreground'>Loading meeting data..</p>
+                                        <div className='glass-card p-6 text-center'>
+                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4'></div>
+                                            <p className='text-gray-400'>Loading meeting data..</p>
                                         </div>
                                     ) : meetingData?.transcript ? (
                                         <TranscriptDisplay transcript={meetingData.transcript} />
                                     ) : (
-                                        <div className='bg-card rounded-lg p-6 border border-border text-center'>
-                                            <p className='text-muted-foreground'>No transcript avaialable</p>
+                                        <div className='glass-card p-6 text-center'>
+                                            <p className='text-gray-400'>No transcript available</p>
                                         </div>
                                     )}
                                 </div>
@@ -179,13 +170,13 @@ function MeetingDetail() {
                 </div>
 
                 {!userChecked ? (
-                    <div className='w-90 border-l border-border p-4 bg-card'>
+                    <div className='w-90 border-l border-white/[0.08] p-4 bg-[#0F0F15]'>
                         <div className='animate-pulse'>
-                            <div className='h-4 bg-muted rounded w-1/2 mb-4'></div>
+                            <div className='h-4 bg-white/[0.06] rounded w-1/2 mb-4'></div>
                             <div className='space-y-3'>
-                                <div className='h-8 bg-muted rounded'></div>
-                                <div className='h-8 bg-muted rounded'></div>
-                                <div className='h-8 bg-muted rounded'></div>
+                                <div className='h-8 bg-white/[0.06] rounded'></div>
+                                <div className='h-8 bg-white/[0.06] rounded'></div>
+                                <div className='h-8 bg-white/[0.06] rounded'></div>
                             </div>
                         </div>
                     </div>

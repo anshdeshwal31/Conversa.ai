@@ -9,7 +9,6 @@ import ChatInput from './components/ChatInput'
 function Chat() {
     const {
         chatInput,
-        setChatInput,
         messages,
         showSuggestions,
         isLoading,
@@ -21,8 +20,12 @@ function Chat() {
 
 
     return (
-        <div className='h-screen bg-background flex flex-col'>
-            <div className='flex-1 flex flex-col max-w-4xl mx-auto w-full'>
+        <div className='min-h-screen'>
+            <div className='surface-frame flex flex-col max-w-[1200px] mx-auto w-full ambient-panel overflow-hidden'>
+                <div className='px-6 pt-5 pb-2 border-b border-white/10'>
+                    <span className='section-kicker'>Cross-Meeting AI</span>
+                    <h1 className='text-2xl md:text-3xl font-semibold text-white mt-4'>Chat Across Every Meeting</h1>
+                </div>
 
                 <div className='flex-1 p-6 overflow-auto'>
                     {messages.length === 0 && showSuggestions ? (

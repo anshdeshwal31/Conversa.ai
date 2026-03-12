@@ -28,9 +28,9 @@ function ActionItemRow({
     return (
         <div className='group relative'>
             <div className='flex items-start gap-3'>
-                <div className='w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0'></div>
+                <div className='w-2 h-2 rounded-full bg-white mt-2 flex-shrink-0'></div>
 
-                <p className='flex-1 text-sm leading-relaxed text-foreground'>
+                <p className='flex-1 text-sm leading-relaxed text-gray-300'>
                     {item.text}
                 </p>
 
@@ -41,7 +41,7 @@ function ActionItemRow({
                                 onClick={() => addToIntegration(integrations[0].platform, item)}
                                 disabled={loading[`${integrations[0].platform}-${item.id}`]}
                                 size='sm'
-                                className='px-3 py-1 text-xs flex items-center gap-1'
+                                className='px-3 py-1 text-xs flex items-center gap-1 bg-white text-black hover:opacity-90'
 
                             >
                                 {loading[`${integrations[0].platform}-${item.id}`] ? (
@@ -60,7 +60,7 @@ function ActionItemRow({
                                     <Button
                                         size='sm'
                                         variant='default'
-                                        className='px-3 py-1 text-xs flex items-center gap-1 cursor-pointer'
+                                        className='px-3 py-1 text-xs flex items-center gap-1 cursor-pointer bg-white text-black hover:opacity-90'
                                     >
                                         Add to
                                         <ChevronDown className='h-3 w-3' />

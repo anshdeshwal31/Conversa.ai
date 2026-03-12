@@ -1,6 +1,4 @@
 import { useUsage } from '@/app/contexts/UsageContext'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Send } from 'lucide-react'
 import React from 'react'
 
@@ -36,13 +34,13 @@ function ChatSidebar({
         "Summarize the key action items from this meeting"
     ]
     return (
-        <div className='w-96 border-l border-border bg-card flex flex-col'>
+        <div className='w-96 border-l border-white/[0.08] bg-[#0F0F15] flex flex-col'>
 
-            <div className='p-4 border-b border-border'>
-                <h3 className='font-semibold text-foreground'>
+            <div className='p-4 border-b border-white/[0.08]'>
+                <h3 className='font-semibold text-white'>
                     Meeting Assistant
                 </h3>
-                <p className='text-sm text-muted-foreground'>
+                <p className='text-sm text-gray-500'>
                     Ask me anything about this meeting
                 </p>
             </div>
@@ -54,23 +52,24 @@ function ChatSidebar({
                         className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}
                     >
                         <div
-                            className={`max-w-[80%] rounded-lg p-3 ${message.isBot
-                                ? 'bg-muted text-foreground'
-                                : 'bg-primary text-primary-foreground'
+                            className={`max-w-[80%] rounded-2xl p-3 ${message.isBot
+                                ? 'bg-white/[0.04] border border-white/[0.08] text-gray-300'
+                                : 'bg-white/[0.08] border border-white/[0.14] text-white'
                                 }`}
                         >
                             <p className='text-sm'>{message.content}</p>
                         </div>
-
                     </div>
                 ))}
 
                 {messages.length > 0 && !messages[messages.length - 1].isBot && (
                     <div className='flex justify-start'>
-                        <div className='bg-muted text-foreground rounded-lg p-3'>
-                            <p className='text-sm'>
-                                Thinking...
-                            </p>
+                        <div className='bg-white/[0.04] border border-white/[0.08] text-gray-300 rounded-2xl p-3'>
+                            <div className='flex gap-1'>
+                                <div className='w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce [animation-delay:0ms]'></div>
+                                <div className='w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce [animation-delay:150ms]'></div>
+                                <div className='w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce [animation-delay:300ms]'></div>
+                            </div>
                         </div>
                     </div>
                 )}
@@ -81,31 +80,30 @@ function ChatSidebar({
                                 key={index}
                                 onClick={() => onSuggestionClick(suggestion)}
                                 disabled={!canChat}
-                                className={`w-4/5 rounded-lg p-4 border transition-colors text-center ${canChat
-                                    ? 'bg-primary/10 text-foreground border-primary/20 hover:bg-primary/20'
-                                    : 'bg-muted/50 text-muted-foreground border-muted cursor-not-allowed'
+                                className={`w-4/5 rounded-xl p-4 border transition-all text-center cursor-pointer ${canChat
+                                    ? 'bg-white/[0.04] text-gray-300 border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.2]'
+                                    : 'bg-white/[0.02] text-gray-600 border-white/[0.04] cursor-not-allowed'
                                     }`}
                             >
                                 <p className='text-sm'>⚡️ {suggestion}</p>
                             </button>
                         ))}
-
                     </div>
                 )}
 
                 {!canChat && (
                     <div className='text-center p-4'>
-                        <p className='text-xs text-muted-foreground mb-2'> Daily chat limit reached</p>
-                        <a href="/pricing" className='text-xs text-primary underline'>
-                            Upgrade to continute chatting
+                        <p className='text-xs text-gray-500 mb-2'>Daily chat limit reached</p>
+                        <a href="/pricing" className='text-xs text-white/80 hover:underline'>
+                            Upgrade to continue chatting
                         </a>
                     </div>
                 )}
             </div>
 
-            <div className='p-4 border-t border-border'>
+            <div className='p-4 border-t border-white/[0.08]'>
                 <div className='flex gap-2'>
-                    <Input
+                    <input
                         type='text'
                         value={chatInput}
                         onChange={(e) => onInputChange(e.target.value)}
@@ -116,22 +114,20 @@ function ChatSidebar({
                             }
                         }}
                         placeholder={canChat ? "Ask about this meeting..." : "Daily limit reached"}
-                        className='flex-1'
+                        className='flex-1 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/25 transition-all'
                         disabled={!canChat}
                     />
 
-                    <Button
+                    <button
                         type='button'
                         onClick={onSendMessage}
                         disabled={!chatInput.trim() || !canChat}
+                        className='bg-white text-black p-2.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer hover:opacity-90'
                     >
                         <Send className='h-4 w-4' />
-                    </Button>
-
+                    </button>
                 </div>
-
             </div>
-
         </div>
     )
 }

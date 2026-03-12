@@ -1,28 +1,28 @@
 'use client'
 
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { useAuth } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
-import { AppSidebar } from "./app-sidebar";
+import { GlobalNavbar } from "./global-navbar";
 
 export function ConditionalLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname()
     const { isSignedIn } = useAuth()
 
-    const showSidebar = pathname !== "/" && !(pathname.startsWith("/meeting/") && !isSignedIn)
+    const showFrame = !pathname.startsWith('/api')
+    const isSharedMeetingView = pathname.startsWith('/meeting/') && !isSignedIn
 
-    if (!showSidebar) {
-        return <div className="min-h-screen">{children}</div>
+    if (!showFrame) {
+        return <>{children}</>
     }
 
     return (
-        <SidebarProvider defaultOpen={true}>
-            <div className="flex h-screen w-full">
-                <AppSidebar />
-                <main className="flex-1 overflow-auto">
+        <div className="min-h-screen pb-6 md:pb-10">
+            <GlobalNavbar />
+            <main className={isSharedMeetingView ? "px-0 pb-0" : "px-3 pb-8 md:px-5"}>
+                <div className={isSharedMeetingView ? "" : "max-w-[1320px] mx-auto"}>
                     {children}
-                </main>
-            </div>
-        </SidebarProvider>
+                </div>
+            </main>
+        </div>
     )
 }

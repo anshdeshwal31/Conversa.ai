@@ -15,8 +15,6 @@ function Integrations() {
         setupData,
         setSetupData,
         setupLoading,
-        setSetupLoading,
-        fetchIntegrations,
         fetchSetupData,
         handleConnect,
         handleDisconnect,
@@ -25,30 +23,29 @@ function Integrations() {
 
     if (loading) {
         return (
-            <div className='min-h-screen bg-background flex items-center justify-center p-6'>
+            <div className='min-h-screen flex items-center justify-center p-6'>
                 <div className='flex flex-col items-center justify-center'>
-                    <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-foreground mb-4'></div>
-                    <div className='text-foreground'>Loading Integrations...</div>
+                    <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-white mb-4'></div>
+                    <div className='text-gray-400'>Loading Integrations...</div>
                 </div>
             </div>
         )
     }
     return (
-        <div className='min-h-screen bg-background p-6'>
-            <div className='max-w-4xl mx-auto'>
+        <div className='min-h-screen'>
+            <div className='surface-frame max-w-[1320px] mx-auto p-6 md:p-8 ambient-panel'>
                 <div className='mb-8'>
-                    <h1 className='text-2xl font-bold text-foreground mb-2'>Integrations</h1>
-
-                    <p className='text-muted-foreground'>
+                    <span className='section-kicker'>Integrations</span>
+                    <h1 className='text-2xl md:text-3xl font-semibold text-white mt-4 mb-2'>Connect Your Stack</h1>
+                    <p className='text-white/60'>
                         Connect your favourite tools to automatically add action items from meetings
-
                     </p>
                 </div>
 
                 {setupMode && (
-                    <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-50'>
-                        <div className='bg-card rounded-lg p-6 border border-border max-w-md w-full mx-4'>
-                            <h2 className='text-lg font-semibold text-foreground mb-4'>
+                    <div className='fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50'>
+                        <div className='glass-card p-6 max-w-md w-full mx-4'>
+                            <h2 className='text-lg font-semibold text-white mb-4'>
                                 Setup {setupMode.charAt(0).toUpperCase() + setupMode.slice(1)}
                             </h2>
 
@@ -63,9 +60,7 @@ function Integrations() {
                                 }}
                                 loading={setupLoading}
                             />
-
                         </div>
-
                     </div>
                 )}
 
@@ -84,19 +79,27 @@ function Integrations() {
                     ))}
                 </div>
 
-                <div className='mt-8 bg-card rounded-lg p-6 border border-border'>
-                    <h3 className='font-semibold text-foreground mb-2'>How it wokrs </h3>
-
-                    <ol className='text-sm text-muted-foreground space-y-2'>
-                        <li>1. Connect your preffered tools above</li>
-                        <li>2. Choose where to send action items during setup</li>
-                        <li>3. In meetings, hover over action items and click "Add to"</li>
-                        <li>4. Select which tool(s) to add the task to from the dropdown</li>
-
+                <div className='mt-8 glass-card p-6'>
+                    <h3 className='font-semibold text-white mb-3'>How it works</h3>
+                    <ol className='text-sm text-white/62 space-y-2.5'>
+                        <li className='flex items-start gap-3'>
+                            <span className='w-5 h-5 rounded-full bg-white/[0.14] text-white text-xs flex items-center justify-center flex-shrink-0 mt-0.5 font-medium'>1</span>
+                            Connect your preferred tools above
+                        </li>
+                        <li className='flex items-start gap-3'>
+                            <span className='w-5 h-5 rounded-full bg-white/[0.14] text-white text-xs flex items-center justify-center flex-shrink-0 mt-0.5 font-medium'>2</span>
+                            Choose where to send action items during setup
+                        </li>
+                        <li className='flex items-start gap-3'>
+                            <span className='w-5 h-5 rounded-full bg-white/[0.14] text-white text-xs flex items-center justify-center flex-shrink-0 mt-0.5 font-medium'>3</span>
+                            In meetings, hover over action items and click &quot;Add to&quot;
+                        </li>
+                        <li className='flex items-start gap-3'>
+                            <span className='w-5 h-5 rounded-full bg-white/[0.14] text-white text-xs flex items-center justify-center flex-shrink-0 mt-0.5 font-medium'>4</span>
+                            Select which tool(s) to add the task to from the dropdown
+                        </li>
                     </ol>
-
                 </div>
-
             </div>
         </div>
     )

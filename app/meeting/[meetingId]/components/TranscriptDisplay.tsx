@@ -38,8 +38,8 @@ export default function TranscriptDisplay({ transcript }: TranscriptDisplayProps
 
     if (!transcript || transcript.length === 0) {
         return (
-            <div className='bg-card rounded-lg p-6 border border-border text-center'>
-                <p className='text-muted-foreground'>
+            <div className='glass-card p-6 text-center'>
+                <p className='text-gray-400'>
                     No transcript available
                 </p>
             </div>
@@ -47,29 +47,28 @@ export default function TranscriptDisplay({ transcript }: TranscriptDisplayProps
     }
 
     return (
-        <div className="bg-card rounded-lg p-6 border border-border">
-            <h3 className="text-lg font-semibold text-foreground mb-4">
+        <div className="glass-card p-6">
+            <h3 className="text-lg font-semibold text-white mb-4">
                 Meeting transcript
             </h3>
 
-            <div className="space-y-4 max-h-96 overflow-y-auto">
+            <div className="space-y-4 max-h-96 overflow-y-auto scrollbar-thin">
                 {transcript.map((segment, index) => (
-                    <div key={index} className="pb-4 border-b border-border last:border-b-0">
+                    <div key={index} className="pb-4 border-b border-white/[0.06] last:border-b-0">
                         <div className="flex items-center gap-3 mb-2">
-                            <span className="font-medium text-foreground">
+                            <span className="font-medium text-white">
                                 {segment.speaker}
                             </span>
-                            <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded">
+                            <span className="text-xs text-gray-500 bg-white/[0.06] px-2 py-1 rounded">
                                 {getSpeakerSegmentTime(segment)}
                             </span>
                         </div>
-                        <p className="text-muted-foreground leading-relaxed pl-4">
+                        <p className="text-gray-400 leading-relaxed pl-4">
                             {getSegmentText(segment)}
                         </p>
                     </div>
                 ))}
             </div>
-
         </div>
     )
 }

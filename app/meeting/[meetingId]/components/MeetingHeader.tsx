@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button'
 import { Check, Eye, Share2, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
@@ -126,40 +125,38 @@ function MeetingHeader({
         }
     }
     return (
-        <div className='bg-card border-b border-border px-6 py-3.5 flex justify-between items-center'>
-            <h1 className='text-xl font-semibold text-foreground'>
+        <div className='bg-[#0F0F15] border-b border-white/[0.08] px-6 py-3.5 flex justify-between items-center'>
+            <h1 className='text-xl font-semibold text-white'>
                 {title}
             </h1>
 
             {isLoading ? (
-                <div className='flex items-center gap-2 text-sm text-muted-foreground'>
-                    <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-muted-foreground'></div>
+                <div className='flex items-center gap-2 text-sm text-gray-500'>
+                    <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-gray-500'></div>
                     Loading...
                 </div>
             ) : isOwner ? (
                 <div className='flex gap-3'>
-                    <Button
+                    <button
                         onClick={handlePostToSlack}
                         disabled={isPosting || !meetingId}
-                        variant="outline"
-                        className='border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white cursor-pointer disabled:cursor-not-allowed'
+                        className='inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.06] border border-white/[0.08] text-gray-300 text-sm hover:bg-white/[0.1] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
                     >
                         <img
                             src="/slack.png"
                             alt="Slack"
-                            className='w-4 h-4 mr-2'
+                            className='w-4 h-4'
                         />
                         {isPosting ? 'Posting...' : 'Post to Slack'}
-                    </Button>
+                    </button>
 
-                    <Button
+                    <button
                         onClick={handleShare}
-                        variant='outline'
-                        className='flex items-center gap-2 px-4 py-2 bg-muted rounded-lg hover:bg-muted/80 transition-colors text-foreground text-sm cursor-pointer'
+                        className='inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.06] border border-white/[0.08] text-gray-300 text-sm hover:bg-white/[0.1] transition-colors cursor-pointer'
                     >
                         {copied ? (
                             <>
-                                <Check className='h-4 w-4' />
+                                <Check className='h-4 w-4 text-white' />
                                 Copied!
                             </>
                         ) : (
@@ -168,21 +165,19 @@ function MeetingHeader({
                                 Share
                             </>
                         )}
+                    </button>
 
-                    </Button>
-
-                    <Button
+                    <button
                         onClick={handleDelete}
                         disabled={isDeleting}
-                        className='flex items-center gap-2 px-4 py-2 rounded-lg bg-destructive text-white hover:bg-destructive/90 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'
+                        className='inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm hover:bg-red-500/20 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
                     >
                         <Trash2 className='h-4 w-4' />
                         {isDeleting ? 'Deleting...' : 'Delete'}
-
-                    </Button>
+                    </button>
                 </div>
             ) : (
-                <div className='flex items-center gap-2 text-sm text-muted-foreground'>
+                <div className='flex items-center gap-2 text-sm text-gray-500'>
                     <Eye className='w-4 h-4' />
                     Viewing shared meeting
                 </div>

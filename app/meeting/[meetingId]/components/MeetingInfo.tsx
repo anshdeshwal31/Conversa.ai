@@ -18,13 +18,13 @@ function MeetingInfo({ meetingData }: MeetingInfoProps) {
     const { user } = useUser()
     return (
         <div className='mb-8'>
-            <h2 className='text-3xl font-bold text-foreground mb-3'>
+            <h2 className='text-3xl font-bold text-white mb-3'>
                 {meetingData.title}
             </h2>
 
-            <div className='text-sm text-muted-foreground mb-8 flex items-center gap-4 flex-wrap'>
+            <div className='text-sm text-gray-400 mb-8 flex items-center gap-4 flex-wrap'>
                 <span className='flex items-center gap-2'>
-                    <div className='w-5 h-5 rounded-full overflow-hidden flex-shrink-0 ring-1 ring-border'>
+                    <div className='w-5 h-5 rounded-full overflow-hidden flex-shrink-0 ring-1 ring-white/[0.1]'>
                         {user?.imageUrl ? (
                             <img
                                 src={user.imageUrl}
@@ -32,8 +32,8 @@ function MeetingInfo({ meetingData }: MeetingInfoProps) {
                                 className="w-5 h-5 rounded-full object-cover"
                             />
                         ) : (
-                            <div className='w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center'>
-                                <span className='text-xs text-primary font-medium'>
+                            <div className='w-5 h-5 bg-white/[0.1] rounded-full flex items-center justify-center'>
+                                <span className='text-xs text-white font-medium'>
                                     {meetingData.userName.charAt(0).toUpperCase()}
                                 </span>
                             </div>
@@ -41,11 +41,11 @@ function MeetingInfo({ meetingData }: MeetingInfoProps) {
                     </div>
                     {meetingData.userName}
                 </span>
-                <span className='flex items-center gap-1'>
+                <span className='flex items-center gap-1.5 text-gray-500'>
                     📅 {meetingData.date}
                 </span>
 
-                <span className='flex items-center gap-1'>
+                <span className='flex items-center gap-1.5 text-gray-500'>
                     🕐 {meetingData.time}
                 </span>
             </div>

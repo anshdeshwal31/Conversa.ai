@@ -1,10 +1,11 @@
 import { prisma } from '@/lib/db'
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
-import Stripe from 'stripe'
+import Razorpay from 'razorpay'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2025-06-30.basil'
+const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID!,
+    key_secret: process.env.RAZORPAY_KEY_SECRET!
 })
 
 export async function POST(request: NextRequest) {
@@ -17,10 +18,10 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'not authenticated' }, { status: 401 })
         }
 
-        const { priceId, planName } = await request.json()
+        const { amount, planName } = await request.json()
 
-        if (!priceId) {
-            return NextResponse.json({ error: 'price Id is required' }, { status: 400 })
+        if (!amount || typeof amount !== 'number' || amount <= 0) {
+            return NextResponse.json({ error: 'valid amount is required' }, { status: 400 })
         }
 
         let dbUser = await prisma.user.findUnique({
@@ -40,58 +41,26 @@ export async function POST(request: NextRequest) {
             })
         }
 
-        let stripeCustomerId = dbUser?.stripeCustomerId
-
-        if (!stripeCustomerId) {
-            const customer = await stripe.customers.create({
-                email: user.primaryEmailAddress?.emailAddress!,
-                name: user.fullName || undefined,
-                metadata: {
-                    clerkUserId: userId,
-                    dbUserId: dbUser.id
-                }
-            })
-
-            stripeCustomerId = customer.id
-
-            await prisma.user.update({
-                where: {
-                    id: dbUser.id
-                },
-                data: {
-                    stripeCustomerId
-                }
-            })
-        }
-
-        const session = await stripe.checkout.sessions.create({
-            customer: stripeCustomerId,
-            payment_method_types: ['card'],
-            line_items: [
-                {
-                    price: priceId,
-                    quantity: 1
-                }
-            ],
-            mode: 'subscription',
-            success_url: `${process.env.NEXT_PUBLIC_APP_URL}/home?success=true`,
-            cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
-            metadata: {
+        const order = await razorpay.orders.create({
+            amount,
+            currency: 'INR',
+            receipt: `receipt_${userId}_${Date.now()}`,
+            notes: {
                 clerkUserId: userId,
                 dbUserId: dbUser.id,
-                planName
-            },
-            subscription_data: {
-                metadata: {
-                    clerkUserId: userId,
-                    dbUserId: dbUser.id,
-                    planName
-                }
+                planName: planName || 'free'
             }
         })
-        return NextResponse.json({ url: session.url })
+
+        return NextResponse.json({
+            key: process.env.RAZORPAY_KEY_ID,
+            orderId: order.id,
+            amount: order.amount,
+            currency: order.currency,
+            planName: planName || 'free'
+        })
     } catch (error) {
-        console.error('stripe checkout error:', error)
-        return NextResponse.json({ error: 'failed to create checkout session' }, { status: 500 })
+        console.error('razorpay order creation error:', error)
+        return NextResponse.json({ error: 'failed to create razorpay order' }, { status: 500 })
     }
 }

@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import { Pause, Play, SkipBack, SkipForward, Volume2 } from 'lucide-react';
 import React, { useRef, useState } from 'react'
 import AudioPlayer from 'react-h5-audio-player';
@@ -96,7 +95,7 @@ function CustomAudioPlayer({
 
     return (
         <div
-            className={`fixed bottom-0 bg-card border-t border-border p-5 ${!isOwner
+            className={`fixed bottom-0 bg-[#0F0F15] border-t border-white/[0.08] p-5 ${!isOwner
                 ? 'left-0 right-0'
                 : ''
                 }`}
@@ -135,74 +134,62 @@ function CustomAudioPlayer({
             <div className={!isOwner ? 'max-w-4xl mx-auto' : ''}>
                 <div className='flex items-center gap-4'>
                     <div className='flex items-center gap-3'>
-                        <Button
-                            variant='ghost'
-                            size='icon'
+                        <button
                             onClick={handleSkipBack}
-                            className='hover:bg-muted rounded-lg transition-colors cursor-pointer'
+                            className='p-2 hover:bg-white/[0.06] rounded-lg transition-colors cursor-pointer'
                         >
-                            <SkipBack className='h-4 w-4 text-foreground' />
-                        </Button>
+                            <SkipBack className='h-4 w-4 text-gray-300' />
+                        </button>
 
-                        <Button
-                            variant='default'
-                            size='icon'
+                        <button
                             onClick={handlePlayPause}
-                            className='bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-colors cursor-pointer'
+                            className='bg-white p-2.5 rounded-full cursor-pointer hover:opacity-90'
                         >
-                            {isPlaying ? <Pause className='h-5 w-5' /> : <Play className='h-5 w-5' />}
+                            {isPlaying ? <Pause className='h-5 w-5 text-black' /> : <Play className='h-5 w-5 text-black' />}
+                        </button>
 
-                        </Button>
-
-                        <Button
-                            variant='ghost'
-                            size='icon'
+                        <button
                             onClick={handleSkipForward}
-                            className='hover:bg-muted rounded-lg transition-colors cursor-pointer'
+                            className='p-2 hover:bg-white/[0.06] rounded-lg transition-colors cursor-pointer'
                         >
-                            <SkipForward className='h-4 w-4' />
-                        </Button>
-
+                            <SkipForward className='h-4 w-4 text-gray-300' />
+                        </button>
                     </div>
 
                     <div className='flex-1 flex items-center gap-3'>
-                        <span className='text-sm text-muted-foreground min-w-[40px]'>
+                        <span className='text-sm text-gray-500 min-w-[40px]'>
                             {formatTime(currentTime)}
                         </span>
 
                         <div
-                            className='flex-1 bg-muted rounded-full h-2 cursor-pointer'
+                            className='flex-1 bg-white/[0.06] rounded-full h-1.5 cursor-pointer'
                             onClick={handleProgressClick}
                         >
                             <div
-                                className='bg-primary h-2 rounded-full transition-all duration-300'
+                                className='bg-white h-1.5 rounded-full transition-all duration-300'
                                 style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
                             />
                         </div>
 
-                        <span className='text-sm text-muted-foreground min-w-[40px]'>
+                        <span className='text-sm text-gray-500 min-w-[40px]'>
                             {formatTime(duration)}
                         </span>
-
-
                     </div>
 
                     <div className='flex items-center gap-2'>
-                        <Volume2 className='h-4 w-4 text-muted-foreground' />
+                        <Volume2 className='h-4 w-4 text-gray-500' />
                         <div
-                            className='w-20 bg-muted rounded-full h-2 cursor-pointer'
+                            className='w-20 bg-white/[0.06] rounded-full h-1.5 cursor-pointer'
                             onClick={handleVolumeChange}
                         >
                             <div
-                                className='bg-primary h-2 rounded-full'
+                                className='bg-white h-1.5 rounded-full'
                                 style={{ width: `${volume * 100}%` }}
                             />
-
                         </div>
-
                     </div>
 
-                    <div className='text-sm text-muted-foreground'>
+                    <div className='text-sm text-gray-500'>
                         Meeting Recording
                     </div>
 

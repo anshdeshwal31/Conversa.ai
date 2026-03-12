@@ -2,36 +2,38 @@ import React from 'react'
 
 function StatsSection() {
     return (
-
-        <section className='py-20 bg-black'>
-            <div className='max-w-6xl mx-auto px-4'>
-                <div className='grid md:grid-cols-4 gap-8 mb-20 pb-16'>
-                    <div className='text-center group'>
-                        <div className='text-4xl font-bold bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600  bg-clip-text text-transparent mb-2'>
+        <section className='px-1 py-4 md:px-2'>
+            <div className='surface-frame max-w-[1320px] mx-auto p-6 md:p-10'>
+                <div className='grid md:grid-cols-4 gap-4 md:gap-5'>
+                    <div className='glass-card p-5 md:p-6 text-left'>
+                        <p className='text-xs uppercase tracking-[0.18em] text-white/45 mb-3'>Teams</p>
+                        <div className='text-4xl font-semibold text-white mb-1'>
                             2+
                         </div>
-                        <p className='text-gray-400'>Happy Users</p>
+                        <p className='text-white/62 text-sm'>Fast-growing teams onboarded</p>
                     </div>
-                    <div className='text-center group'>
-                        <div className='text-4xl font-bold bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600  bg-clip-text text-transparent mb-2'>
+                    <div className='glass-card p-5 md:p-6 text-left'>
+                        <p className='text-xs uppercase tracking-[0.18em] text-white/45 mb-3'>Reliability</p>
+                        <div className='text-4xl font-semibold text-white mb-1'>
                             99.69%
                         </div>
-                        <p className='text-gray-400'>Uptime</p>
+                        <p className='text-white/62 text-sm'>Service and processing uptime</p>
                     </div>
-                    <div className='text-center group'>
-                        <div className='text-4xl font-bold bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600  bg-clip-text text-transparent mb-2'>
+                    <div className='glass-card p-5 md:p-6 text-left'>
+                        <p className='text-xs uppercase tracking-[0.18em] text-white/45 mb-3'>Setup</p>
+                        <div className='text-4xl font-semibold text-white mb-1'>
                             2min
                         </div>
-                        <p className='text-gray-400'>Setup Time</p>
+                        <p className='text-white/62 text-sm'>Average first-run configuration</p>
                     </div>
-                    <div className='text-center group'>
-                        <div className='text-4xl font-bold bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600  bg-clip-text text-transparent mb-2'>
+                    <div className='glass-card p-5 md:p-6 text-left'>
+                        <p className='text-xs uppercase tracking-[0.18em] text-white/45 mb-3'>Savings</p>
+                        <div className='text-4xl font-semibold text-white mb-1'>
                             50hrs
                         </div>
-                        <p className='text-gray-400'>Saved Per Month</p>
+                        <p className='text-white/62 text-sm'>Monthly meeting ops reclaimed</p>
                     </div>
                 </div>
-
             </div>
         </section>
     )

@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Plus } from 'lucide-react'
 import React from 'react'
 
@@ -22,13 +21,13 @@ function AddActionItemInput({
     if (showAddInput) {
 
         return (
-            <div className='flex items-center gap-2 p-3 bg-muted/30 rounded-lg'>
-                <Input
+            <div className='flex items-center gap-2 p-3 bg-white/[0.04] border border-white/[0.06] rounded-xl'>
+                <input
                     type='text'
                     value={newItemText}
                     onChange={(e) => setNewItemText(e.target.value)}
                     placeholder='Enter action item...'
-                    className='flex-1'
+                    className='flex-1 bg-transparent border-0 text-sm text-white placeholder:text-gray-600 focus:outline-none'
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
                             onAddItem()
@@ -40,38 +39,34 @@ function AddActionItemInput({
                     }}
                     autoFocus
                 />
-                <Button
+                <button
                     onClick={onAddItem}
                     disabled={!newItemText.trim()}
-                    size='sm'
+                    className='px-3 py-1.5 bg-white text-black rounded-lg text-xs font-medium disabled:opacity-50 cursor-pointer hover:opacity-90'
                 >
                     Add
-                </Button>
-                <Button
-                    variant='outline'
-                    size='sm'
+                </button>
+                <button
                     onClick={() => {
                         setShowAddInput(false)
                         setNewItemText('')
                     }}
+                    className='px-3 py-1.5 bg-white/[0.06] border border-white/[0.08] rounded-lg text-gray-400 text-xs hover:bg-white/[0.1] transition-colors cursor-pointer'
                 >
                     Cancel
-                </Button>
-
+                </button>
             </div>
         )
 
     }
     return (
-        <Button
-            variant='ghost'
-            className='flex items-center gap-3 w-full py-2 px-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-lg transition-colors group'
+        <button
+            className='flex items-center gap-3 w-full py-2 px-3 text-sm text-gray-500 hover:text-gray-300 hover:bg-white/[0.04] rounded-xl transition-colors group cursor-pointer'
             onClick={() => setShowAddInput(true)}
         >
             <Plus className='h-4 w-4' />
             <span>Add Action Item</span>
-
-        </Button>
+        </button>
     )
 }
 

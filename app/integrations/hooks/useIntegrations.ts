@@ -13,7 +13,7 @@ export interface Integration {
 }
 
 export function useIntegrations() {
-    const { userId } = useAuth()
+    const { userId, isLoaded } = useAuth()
 
     const [integrations, setIntegrations] = useState<Integration[]>([
         {
@@ -59,8 +59,14 @@ export function useIntegrations() {
     const [setupLoading, setSetupLoading] = useState(false)
 
     useEffect(() => {
+        if (!isLoaded) {
+            return
+        }
+
         if (userId) {
             fetchIntegrations()
+        } else {
+            setLoading(false)
         }
 
         const urlParams = new URLSearchParams(window.location.search)
@@ -69,7 +75,7 @@ export function useIntegrations() {
             setSetupMode(setup)
             fetchSetupData(setup)
         }
-    }, [userId])
+    }, [userId, isLoaded])
 
 
     const fetchIntegrations = async () => {

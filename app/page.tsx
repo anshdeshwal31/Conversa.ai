@@ -1,4 +1,3 @@
-import Image from "next/image";
 import HeroSection from "./components/landing/HeroSection";
 import FeaturesSection from "./components/landing/FeaturesSection";
 import IntegrationsSection from "./components/landing/IntegrationsSection";
@@ -10,8 +9,7 @@ import Footer from "./components/landing/Footer";
 
 export default function Home() {
   return (
-
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen space-y-1 pb-2">
       <HeroSection />
       <FeaturesSection />
       <IntegrationsSection />

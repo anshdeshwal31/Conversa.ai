@@ -71,7 +71,7 @@ export function AppSidebar() {
                 }
             case 'premium':
                 return {
-                    title: "You're on Premium broski!",
+                    title: "You're on Premium!",
                     description: "Enjoying unlimited access to all features",
                     showButton: false
                 }
@@ -88,36 +88,43 @@ export function AppSidebar() {
     const upgradeInfo = getUpgradeInfo()
 
     return (
-        <Sidebar collapsible="none" className="border-r border-sidebar-border h-screen">
-            <SidebarHeader className="border-b border-sidebar-border p-4">
-                <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-                        <Bot className="w-4 h-4" />
+        <Sidebar collapsible="none" className="border-r border-white/[0.08] h-screen bg-[#06101b]">
+            <SidebarHeader className="border-b border-white/[0.08] p-5">
+                <Link href="/" className="flex items-center gap-2.5">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/18 border border-primary/32">
+                        <Bot className="w-4 h-4 text-primary" />
                     </div>
-                    <span className="text-lg font-semibold text-sidebar-foreground">
-                        MeetingBot
+                    <span className="text-lg font-bold text-white">
+                        Conversa<span className="text-white/65">.ai</span>
                     </span>
-                </div>
+                </Link>
             </SidebarHeader>
 
             <SidebarContent className="flex-1 p-4">
                 <SidebarGroup>
                     <SidebarGroupContent>
-                        <SidebarMenu className="space-y-2">
-                            {items.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton
-                                        asChild
-                                        isActive={pathname === item.url}
-                                        className="w-full justify-start gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-primary data-[active=true]:text-sidebar-primary-foreground"
-                                    >
-                                        <Link href={item.url}>
-                                            <item.icon className="w-4 h-4" />
-                                            <span>{item.title}</span>
-                                        </Link>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
+                        <SidebarMenu className="space-y-1.5">
+                            {items.map((item) => {
+                                const isActive = pathname === item.url
+                                return (
+                                    <SidebarMenuItem key={item.title}>
+                                        <SidebarMenuButton
+                                            asChild
+                                            isActive={isActive}
+                                            className={`w-full justify-start gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200 ${
+                                                isActive
+                                                        ? 'bg-primary/15 text-primary border border-primary/25'
+                                                        : 'text-white/56 hover:text-white hover:bg-white/[0.05]'
+                                            }`}
+                                        >
+                                            <Link href={item.url}>
+                                                <item.icon className={`w-4 h-4 ${isActive ? 'text-white' : ''}`} />
+                                                <span>{item.title}</span>
+                                            </Link>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                )
+                            })}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
@@ -125,52 +132,52 @@ export function AppSidebar() {
 
             <SidebarFooter className="p-4 mt-auto">
                 {usage && (
-                    <div className="rounded-lg bg-sidebar-accent/50 p-3 mb-3">
-                        <p className="text-xs font-medium text-sidebar-accent-foreground mb-3">
-                            Current Plan: {usage.currentPlan.toUpperCase()}
+                    <div className="glass-card rounded-xl p-3.5 mb-3">
+                        <p className="text-xs font-semibold text-white/75 mb-3 uppercase tracking-wider">
+                            {usage.currentPlan.toUpperCase()} Plan
                         </p>
 
                         <div className="space-y-2 mb-3">
                             <div className="flex justify-between items-center">
-                                <span className="text-xs text-sidebar-accent-foreground/70">
+                                <span className="text-xs text-white/40">
                                     Meetings
                                 </span>
-                                <span className="text-xs text-sidebar-accent-foreground/70">
+                                <span className="text-xs text-white/40">
                                     {usage.meetingsThisMonth}/{limits.meetings === -1 ? '∞' : limits.meetings}
                                 </span>
                             </div>
                             {limits.meetings !== -1 && (
-                                <div className="w-full bg-sidebar-accent/30 rounded-full h-2">
+                                    <div className="w-full bg-white/[0.08] rounded-full h-1.5">
                                     <div
-                                        className="bg-sidebar-primary h-2 rounded-full transition-all duration-500 ease-out"
+                                        className="bg-primary h-1.5 rounded-full transition-all duration-500 ease-out"
                                         style={{ width: `${meetingProgress}%` }}
                                     > </div>
                                 </div>
                             )}
                             {limits.meetings === -1 && (
-                                <div className="text-xs text-sidebar-accent-foreground/50 italic">Unlimited</div>
+                                <div className="text-xs text-white/30 italic">Unlimited</div>
                             )}
                         </div>
 
                         <div className="space-y-2 mb-3">
                             <div className="flex justify-between items-center">
-                                <span className="text-xs text-sidebar-accent-foreground/70">
+                                <span className="text-xs text-white/40">
                                     Chat Messages
                                 </span>
-                                <span className="text-xs text-sidebar-accent-foreground/70">
+                                <span className="text-xs text-white/40">
                                     {usage.chatMessagesToday}/{limits.chatMessages === -1 ? '∞' : limits.chatMessages}
                                 </span>
                             </div>
                             {limits.chatMessages !== -1 && (
-                                <div className="w-full bg-sidebar-accent/30 rounded-full h-2">
+                                <div className="w-full bg-white/[0.08] rounded-full h-1.5">
                                     <div
-                                        className="bg-sidebar-primary h-2 rounded-full transition-all duration-500 ease-out"
+                                        className="bg-primary h-1.5 rounded-full transition-all duration-500 ease-out"
                                         style={{ width: `${chatProgress}%` }}
                                     > </div>
                                 </div>
                             )}
                             {limits.chatMessages === -1 && (
-                                <div className="text-xs text-sidebar-accent-foreground/50 italic">Unlimited</div>
+                                <div className="text-xs text-white/30 italic">Unlimited</div>
                             )}
                         </div>
 
@@ -178,19 +185,19 @@ export function AppSidebar() {
                 )}
 
                 {upgradeInfo && (
-                    <div className="rounded-lg bg-sidebar-accent p-4">
+                    <div className="glass-card rounded-xl p-4 border-white/[0.12]">
                         <div className="space-y-3">
                             <div className="space-y-1">
-                                <p className="text-sm font-medium text-sidebar-accent-foreground">
+                                <p className="text-sm font-semibold text-white">
                                     {upgradeInfo.title}
                                 </p>
-                                <p className="text-xs text-sidebar-accent-foreground/70">
+                                <p className="text-xs text-white/40">
                                     {upgradeInfo.description}
                                 </p>
                             </div>
                             {upgradeInfo.showButton && (
                                 <Link href="/pricing">
-                                    <Button className="w-full rounded-md bg-sidebar-primary px-3 py-2 text-xs font-medium text-sidebar-primary-foreground transition-colors hover:bg-sidebar-primary/90 cursor-pointer">
+                                    <Button className="w-full rounded-xl mono-btn-solid text-xs font-semibold cursor-pointer py-2.5">
                                         {upgradeInfo.title}
                                     </Button>
                                 </Link>
@@ -198,7 +205,7 @@ export function AppSidebar() {
 
                             {!upgradeInfo.showButton && (
                                 <div className="text-center py-2">
-                                    <span className="text-xs text-sidebar-accent-foreground/60">🎉 Thank you for your support!</span>
+                                    <span className="text-xs text-white/40">✨ Thank you for your support!</span>
                                 </div>
                             )}
 
