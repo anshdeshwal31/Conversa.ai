@@ -31,7 +31,7 @@ export function GlobalNavbar() {
               <Sparkles className='w-4 h-4 text-primary' />
             </div>
             <span className='text-sm font-semibold tracking-wide text-white'>
-              CONVERSA
+              Convorbit AI
               <span className='text-primary ml-1'>STUDIO</span>
             </span>
           </Link>

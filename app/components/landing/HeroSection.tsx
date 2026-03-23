@@ -29,7 +29,7 @@ export default function HeroSection() {
                         </h1>
 
                         <p className='mt-6 max-w-2xl text-white/68 text-base md:text-lg leading-relaxed'>
-                            Conversa Studio captures context, extracts decisions, and routes action automatically.
+                            Convorbit AI Studio captures context, extracts decisions, and routes action automatically.
                             From live calls to follow-up execution, your team moves in one continuous system.
                         </p>
 

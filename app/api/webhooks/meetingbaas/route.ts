@@ -1,4 +1,4 @@
-import { processMeetingTranscript } from "@/lib/ai-processor";
+import { processMeetingTranscript } from "@/lib/meeting-ai-processor";
 import { prisma } from "@/lib/db";
 import { sendMeetingSummaryEmail } from "@/lib/email-service-free";
 import { processTranscript } from "@/lib/rag";

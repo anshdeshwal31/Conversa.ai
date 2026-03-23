@@ -95,7 +95,7 @@ export function AppSidebar() {
                         <Bot className="w-4 h-4 text-primary" />
                     </div>
                     <span className="text-lg font-bold text-white">
-                        Conversa<span className="text-white/65">.ai</span>
+                        Convorbit AI<span className="text-white/65">.ai</span>
                     </span>
                 </Link>
             </SidebarHeader>

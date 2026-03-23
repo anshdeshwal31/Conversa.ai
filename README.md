@@ -6,23 +6,22 @@ PS: Youtube only allows videos of max duration of 12 hours. But since my video i
 ## Upcoming Features
 
 - [ ] Integrations
-   - [ ] Notion Integration
-   - [ ] Linear Integration
-   - [ ] Salesforce Integration
-   - [ ] Hubspot Integration
+  - [ ] Notion Integration
+  - [ ] Linear Integration
+  - [ ] Salesforce Integration
+  - [ ] Hubspot Integration
 - [ ] For past meetings:
-    - [ ] Users should be able to search through their meetings
-    - [ ] Date based filtering (ex: march 17 to april 1)
-    - [ ] Custom date ranges filtering (ex: last week, last month, last quarter)
-    - [ ] Meeting duration filtering (ex: less than 30 mins)
-    - [ ] Participant based filtering
+  - [ ] Users should be able to search through their meetings
+  - [ ] Date based filtering (ex: march 17 to april 1)
+  - [ ] Custom date ranges filtering (ex: last week, last month, last quarter)
+  - [ ] Meeting duration filtering (ex: less than 30 mins)
+  - [ ] Participant based filtering
 - [ ] 100+ languages transcript translation (similar to what fireflies.ai does) (Users will be able to view their transcripts in over 100 languages. They can go to a dropdown menu and change their transcript language) - use Google Cloud Translation API
 
 - [ ] Workspaces Creation
-    - [ ] Users can create a workspace
-    - [ ] Users can invite other people to their workspace
-    - [ ] Role based access
-
+  - [ ] Users can create a workspace
+  - [ ] Users can invite other people to their workspace
+  - [ ] Role based access
 
 ## Contributing
 
@@ -30,7 +29,7 @@ Any contributions are very much appreciated. Take a feature from the above list 
 
 # Overview
 
-Hi 🐶, In this project, you'll build MeetingBot, a comprehensive open-source meeting intelligence platform that automatically joins your video calls on Zoom, Google Meet, and Microsoft Teams to provide AI-powered transcription, summaries, and actionable insights. The platform features real-time calendar sync that automatically schedules bots for upcoming meetings, while giving you full control over which meetings to record. You'll learn how to build a SaaS with AI integrations using OpenAI and Pinecone for conversational meeting intelligence, where users can chat with individual meetings or query across their entire meeting history. The application includes Stripe subscription management, Slack bot integration (we will be building a slack bot from scratch), project management tool synchronization (Asana, Jira, Trello), and features like custom bot personalization and automated action item detection. We'll use technologies such as Next.js 15, TypeScript, Tailwind CSS 4, Shadcn UI, Clerk auth, Prisma ORM, AWS Lambda, AWS S3, OpenAI API, Pinecone vector database, Stripe, Slack Bolt framework, etc and more to create a complete alternative to commercial solutions like Fireflies.ai and Otter.ai.
+Hi 🐶, In this project, you'll build MeetingBot, a comprehensive open-source meeting intelligence platform that automatically joins your video calls on Zoom, Google Meet, and Microsoft Teams to provide AI-powered transcription, summaries, and actionable insights. The platform features real-time calendar sync that automatically schedules bots for upcoming meetings, while giving you full control over which meetings to record. You'll learn how to build a SaaS with AI integrations using Gemini 2.5 Flash via LangChain and Pinecone for conversational meeting intelligence, where users can chat with individual meetings or query across their entire meeting history. The application includes Stripe subscription management, Slack bot integration (we will be building a slack bot from scratch), project management tool synchronization (Asana, Jira, Trello), and features like custom bot personalization and automated action item detection. We'll use technologies such as Next.js 15, TypeScript, Tailwind CSS 4, Shadcn UI, Clerk auth, Prisma ORM, AWS Lambda, AWS S3, LangChain, Google Gemini API, Pinecone vector database, Stripe, Slack Bolt framework, etc and more to create a complete alternative to commercial solutions like Fireflies.ai and Otter.ai.
 
 # Features
 
@@ -38,7 +37,7 @@ Hi 🐶, In this project, you'll build MeetingBot, a comprehensive open-source m
 
 - 📝 Meeting transcription with speaker identification and diarization
 
-- 🧠 AI-generated meeting summaries and action items using OpenAI
+- 🧠 AI-generated meeting summaries and action items using Gemini 2.5 Flash (via LangChain)
 
 - 📅 Real-time calendar sync with Google Calendar
 
@@ -97,7 +96,8 @@ Hi 🐶, In this project, you'll build MeetingBot, a comprehensive open-source m
 - AWS Lambda
 - AWS S3
 - AWS EventBridge Scheduler
-- OpenAI API
+- LangChain (@langchain/core + @langchain/google-genai)
+- Google Gemini API (Gemini 2.5 Flash)
 - Pinecone Vector Database
 - Stripe
 - Slack Bolt Framework

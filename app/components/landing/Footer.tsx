@@ -10,10 +10,10 @@ function Footer() {
                         <div className='w-8 h-8 bg-primary/18 border border-primary/40 rounded-lg flex items-center justify-center'>
                             <Sparkles className='w-4 h-4 text-primary' />
                         </div>
-                        <span className='text-xl font-semibold text-white'>Conversa Studio</span>
+                        <span className='text-xl font-semibold text-white'>Convorbit AI Studio</span>
                     </div>
                     <div className='text-white/50 text-sm'>
-                        &copy; {new Date().getFullYear()} Conversa Studio. Built for cinematic meeting execution.
+                        &copy; {new Date().getFullYear()} Convorbit AI Studio. Built for cinematic meeting execution.
                     </div>
                 </div>
             </div>

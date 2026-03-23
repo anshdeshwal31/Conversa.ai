@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Conversa.ai",
+  title: "Convorbit AI",
   description: "AI meeting workspace",
 };
 

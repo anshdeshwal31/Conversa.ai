@@ -10,6 +10,7 @@ export async function handleMessage({ message, say, client }: any) {
         if (message.user && message.user.startsWith('B')) {
             return
         }
+
         const authTest = await client.auth.test()
 
         if (message.user == authTest.user_id) {
