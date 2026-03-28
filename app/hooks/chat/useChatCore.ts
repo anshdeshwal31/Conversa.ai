@@ -74,7 +74,7 @@ export function useChatCore({
                 if (data.upgradeRequired) {
                     const upgradeMessage: ChatMessage = {
                         id: messages.length + 2,
-                        content: `${data.error} Visit the Pricing page to upgrade your plan and continue chatting!`,
+                        content: `${data.error} Visit the Pricing page for plan details. Starter is free, and Pro/Premium are coming soon.`,
                         isBot: true,
                         timestamp: new Date()
                     }

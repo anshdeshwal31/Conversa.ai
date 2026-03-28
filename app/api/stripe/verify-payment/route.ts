@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from 'next/server'
 function normalizePlan(planName: string) {
     const normalized = planName.toLowerCase()
 
-    if (normalized === 'starter' || normalized === 'pro' || normalized === 'premium') {
+    if (normalized === 'free' || normalized === 'starter' || normalized === 'pro' || normalized === 'premium') {
         return normalized
     }
 
@@ -27,6 +27,14 @@ export async function POST(request: NextRequest) {
             razorpay_signature,
             planName
         } = await request.json()
+        const normalizedPlan = normalizePlan(planName || 'free')
+
+        if (normalizedPlan === 'pro' || normalizedPlan === 'premium') {
+            return NextResponse.json(
+                { error: 'Pro and Premium activation is coming soon while Razorpay setup is pending.' },
+                { status: 403 }
+            )
+        }
 
         if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
             return NextResponse.json({ error: 'invalid payment payload' }, { status: 400 })
@@ -62,7 +70,7 @@ export async function POST(request: NextRequest) {
                 id: dbUser.id
             },
             data: {
-                currentPlan: normalizePlan(planName || 'free'),
+                currentPlan: normalizedPlan === 'free' ? 'starter' : normalizedPlan,
                 subscriptionStatus: 'active',
                 billingPeriodStart: new Date(),
                 meetingsThisMonth: 0,

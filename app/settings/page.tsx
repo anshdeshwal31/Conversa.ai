@@ -106,9 +106,8 @@ function Settings() {
     const getPlanDisplayName = (plan: string) => {
         switch (plan.toLowerCase()) {
             case 'free':
-                return 'Free Plan'
             case 'starter':
-                return 'Starter Plan'
+                return 'Starter (Free)'
             case 'pro':
                 return 'Pro Plan'
             case 'premium':
@@ -119,8 +118,10 @@ function Settings() {
     }
 
     const getPlanColor = (plan: string) => {
-        return plan.toLowerCase() === 'free'
-            ? 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
+        const normalizedPlan = plan.toLowerCase()
+
+        return normalizedPlan === 'free' || normalizedPlan === 'starter'
+            ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-400/30'
             : 'bg-white/[0.14] text-white/85 border border-white/[0.24]'
     }
 

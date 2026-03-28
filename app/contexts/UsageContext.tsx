@@ -28,7 +28,7 @@ interface UsageContextType {
 }
 
 const PLAN_LIMITS: Record<string, PlanLimits> = {
-    free: { meetings: 0, chatMessages: 0 },
+    free: { meetings: 10, chatMessages: 30 },
     starter: { meetings: 10, chatMessages: 30 },
     pro: { meetings: 30, chatMessages: 100 },
     premium: { meetings: -1, chatMessages: -1 }
@@ -42,16 +42,16 @@ export function UsageProvider({ children }: { children: ReactNode }) {
     const [loading, setLoading] = useState(true)
 
     const limits = usage ? PLAN_LIMITS[usage.currentPlan] || PLAN_LIMITS.free : PLAN_LIMITS.free
+    const isStarterTier = usage ? (usage.currentPlan === 'free' || usage.currentPlan === 'starter') : false
+    const hasPlanAccess = usage ? (isStarterTier || usage.subscriptionStatus === 'active') : false
 
     const canChat = usage ? (
-        usage.currentPlan !== 'free' &&
-        usage.subscriptionStatus === 'active' &&
+        hasPlanAccess &&
         (limits.chatMessages === -1 || usage.chatMessagesToday < limits.chatMessages)
     ) : false
 
     const canScheduleMeeting = usage ? (
-        usage.currentPlan !== 'free' &&
-        usage.subscriptionStatus === 'active' &&
+        hasPlanAccess &&
         (limits.meetings === -1 || usage.meetingsThisMonth < limits.meetings)
     ) : false
 

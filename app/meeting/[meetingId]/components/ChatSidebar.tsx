@@ -95,7 +95,7 @@ function ChatSidebar({
                     <div className='text-center p-4'>
                         <p className='text-xs text-gray-500 mb-2'>Daily chat limit reached</p>
                         <a href="/pricing" className='text-xs text-white/80 hover:underline'>
-                            Upgrade to continue chatting
+                            See pricing details (Starter is free, Pro/Premium are coming soon)
                         </a>
                     </div>
                 )}
@@ -113,7 +113,7 @@ function ChatSidebar({
                                 onSendMessage()
                             }
                         }}
-                        placeholder={canChat ? "Ask about this meeting..." : "Daily limit reached"}
+                        placeholder={canChat ? "Ask about this meeting..." : "Daily limit reached — Starter is free; Pro/Premium are coming soon"}
                         className='flex-1 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/25 transition-all'
                         disabled={!canChat}
                     />

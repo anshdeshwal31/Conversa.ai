@@ -9,9 +9,19 @@ export async function GET() {
             return NextResponse.json({ error: 'unautorized' }, { status: 401 })
         }
 
-        const dbUser = await prisma.user.findUnique({
+        const dbUser = await prisma.user.upsert({
             where: {
                 clerkId: user.id
+            },
+            update: {
+                email: user.primaryEmailAddress?.emailAddress || null,
+                name: user.fullName || null
+            },
+            create: {
+                id: user.id,
+                clerkId: user.id,
+                email: user.primaryEmailAddress?.emailAddress || null,
+                name: user.fullName || null
             },
             select: {
                 botName: true,
@@ -41,14 +51,24 @@ export async function POST(request: Request) {
 
         const { botName, botImageUrl } = await request.json()
 
-        await prisma.user.update({
+        await prisma.user.upsert({
             where: {
                 clerkId: user.id
             },
-            data: {
+            update: {
+                botName: botName || 'Meeting Bot',
+                botImageUrl: botImageUrl,
+                email: user.primaryEmailAddress?.emailAddress || null,
+                name: user.fullName || null
+            },
+            create: {
+                id: user.id,
+                clerkId: user.id,
+                email: user.primaryEmailAddress?.emailAddress || null,
+                name: user.fullName || null,
                 botName: botName || 'Meeting Bot',
                 botImageUrl: botImageUrl
-            }
+            },
         })
         return NextResponse.json({ success: true })
     } catch (error) {

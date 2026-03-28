@@ -6,10 +6,14 @@ interface PlanLimits {
 }
 
 const PLAN_LIMITS: Record<string, PlanLimits> = {
-    free: { meetings: 0, chatMessages: 0 },
+    free: { meetings: 10, chatMessages: 30 },
     starter: { meetings: 10, chatMessages: 30 },
     pro: { meetings: 30, chatMessages: 100 },
     premium: { meetings: -1, chatMessages: -1 }
+}
+
+function isStarterTier(plan: string) {
+    return plan === 'free' || plan === 'starter'
 }
 
 export async function canUserSendBot(userId: string) {
@@ -21,8 +25,10 @@ export async function canUserSendBot(userId: string) {
         return { allowed: false, reason: 'User not found' }
     }
 
-    if (user.currentPlan === 'free' || user.subscriptionStatus === 'expired') {
-        return { allowed: false, reason: 'Upgrade your plan to send bots to meetings' }
+    const hasPlanAccess = isStarterTier(user.currentPlan) || user.subscriptionStatus === 'active'
+
+    if (!hasPlanAccess) {
+        return { allowed: false, reason: 'Your subscription is inactive' }
     }
 
     const limits = PLAN_LIMITS[user.currentPlan]
@@ -47,21 +53,23 @@ export async function canUserChat(userId: string) {
     })
 
     if (!user) {
-        return { allowed: false, reason: 'user not found' }
+        return { allowed: false, reason: 'User not found' }
     }
 
-    if (user.currentPlan === 'free' || user.subscriptionStatus === 'expired') {
-        return { allowed: false, reason: 'Upgrade your plan to chat with out AI bot' }
+    const hasPlanAccess = isStarterTier(user.currentPlan) || user.subscriptionStatus === 'active'
+
+    if (!hasPlanAccess) {
+        return { allowed: false, reason: 'Your subscription is inactive' }
     }
 
     const limits = PLAN_LIMITS[user.currentPlan]
 
     if (!limits) {
-        return { allowed: false, reason: 'invalid subscription plan' }
+        return { allowed: false, reason: 'Invalid subscription plan' }
     }
 
     if (limits.chatMessages !== -1 && user.chatMessagesToday >= limits.chatMessages) {
-        return { allowed: false, reason: `you've reached your daily limit of ${limits.chatMessages} messages` }
+        return { allowed: false, reason: `You've reached your daily limit of ${limits.chatMessages} messages` }
     }
 
     return { allowed: true }

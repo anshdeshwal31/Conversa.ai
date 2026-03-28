@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -10,9 +10,23 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: 'not authed' }, { status: 401 })
         }
 
-        const user = await prisma.user.findUnique({
+        const clerkUser = await currentUser()
+        const email = clerkUser?.primaryEmailAddress?.emailAddress ?? null
+        const name = clerkUser?.fullName ?? null
+
+        const user = await prisma.user.upsert({
             where: {
                 clerkId: userId
+            },
+            update: {
+                ...(email ? { email } : {}),
+                ...(name ? { name } : {})
+            },
+            create: {
+                id: userId,
+                clerkId: userId,
+                email,
+                name
             },
             select: {
                 currentPlan: true,
@@ -23,9 +37,6 @@ export async function GET(request: NextRequest) {
             }
         })
 
-        if (!user) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 })
-        }
         return NextResponse.json(user)
     } catch (error) {
         return NextResponse.json({ error: 'failed to fetch usaged' }, { status: 500 })

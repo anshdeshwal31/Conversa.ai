@@ -51,41 +51,41 @@ export function AppSidebar() {
 
         switch (usage.currentPlan) {
             case 'free':
-                return {
-                    title: "Upgrade to Starter",
-                    description: "Get 10 meetings per month and 30 daily chat messages",
-                    showButton: true
-                }
             case 'starter':
                 return {
-                    title: "Upgrade to Pro",
-                    description: "Get 30 meetings per month and 100 daily chat messages",
+                    title: "Starter (Free)",
+                    description: "You get 10 meetings/month and 30 chat messages/day.",
+                    buttonLabel: "View Pricing",
                     showButton: true
                 }
 
             case 'pro':
                 return {
-                    title: "Upgrade to Premium",
-                    description: "Get unlimited meetings and chat messages",
+                    title: "Pro Plan",
+                    description: "Pro checkout is marked Coming Soon until Razorpay is fully set up.",
+                    buttonLabel: "View Pricing",
                     showButton: true
                 }
             case 'premium':
                 return {
-                    title: "You're on Premium!",
-                    description: "Enjoying unlimited access to all features",
-                    showButton: false
+                    title: "Premium Plan",
+                    description: "Premium checkout is marked Coming Soon until Razorpay is fully set up.",
+                    buttonLabel: "View Pricing",
+                    showButton: true
                 }
 
             default:
                 return {
-                    title: "Upgrade Your Plan",
-                    description: "Get access to more features",
+                    title: "Pricing",
+                    description: "Starter is free. Pro and Premium are coming soon.",
+                    buttonLabel: "View Pricing",
                     showButton: true
                 }
         }
     }
 
     const upgradeInfo = getUpgradeInfo()
+    const planLabel = usage?.currentPlan === 'free' ? 'STARTER (FREE)' : `${usage?.currentPlan.toUpperCase()} PLAN`
 
     return (
         <Sidebar collapsible="none" className="border-r border-white/[0.08] h-screen bg-[#06101b]">
@@ -134,7 +134,7 @@ export function AppSidebar() {
                 {usage && (
                     <div className="glass-card rounded-xl p-3.5 mb-3">
                         <p className="text-xs font-semibold text-white/75 mb-3 uppercase tracking-wider">
-                            {usage.currentPlan.toUpperCase()} Plan
+                            {planLabel}
                         </p>
 
                         <div className="space-y-2 mb-3">
@@ -198,7 +198,7 @@ export function AppSidebar() {
                             {upgradeInfo.showButton && (
                                 <Link href="/pricing">
                                     <Button className="w-full rounded-xl mono-btn-solid text-xs font-semibold cursor-pointer py-2.5">
-                                        {upgradeInfo.title}
+                                        {upgradeInfo.buttonLabel || upgradeInfo.title}
                                     </Button>
                                 </Link>
                             )}

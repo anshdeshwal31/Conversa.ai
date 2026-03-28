@@ -29,6 +29,14 @@ export async function POST(request: NextRequest) {
             const notes = paymentEntity?.notes || {}
             const clerkUserId = notes?.clerkUserId as string | undefined
             const planName = typeof notes?.planName === 'string' ? notes.planName.toLowerCase() : 'free'
+            const normalizedPlan = planName === 'starter' || planName === 'free' ? 'starter' : planName
+
+            if (normalizedPlan === 'pro' || normalizedPlan === 'premium') {
+                return NextResponse.json({
+                    received: true,
+                    message: 'Paid plan activation is disabled until Razorpay setup is complete.'
+                })
+            }
 
             if (clerkUserId) {
                 const dbUser = await prisma.user.findUnique({
@@ -43,7 +51,7 @@ export async function POST(request: NextRequest) {
                             id: dbUser.id
                         },
                         data: {
-                            currentPlan: ['starter', 'pro', 'premium'].includes(planName) ? planName : 'free',
+                            currentPlan: normalizedPlan,
                             subscriptionStatus: 'active',
                             billingPeriodStart: new Date(),
                             meetingsThisMonth: 0,

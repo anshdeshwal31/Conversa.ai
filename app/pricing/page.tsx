@@ -14,8 +14,8 @@ const plans = [
     {
         id: 'starter',
         name: 'Starter',
-        price: 9,
-        amount: 900,
+        priceLabel: 'Free',
+        amount: 0,
         description: 'Perfect for people getting started',
         features: [
             '10 meetings per month',
@@ -24,13 +24,14 @@ const plans = [
             'Action items extraction',
             'Email Notifications'
         ],
-        popular: false
+        popular: false,
+        comingSoon: false
     },
     {
         id: 'pro',
         name: 'Pro',
-        price: 29,
-        amount: 2900,
+        priceLabel: '₹199',
+        amount: 19900,
         description: 'Perfect for people growing who need more power',
         features: [
             '30 meetings per month',
@@ -40,13 +41,14 @@ const plans = [
             'Email Notifications',
             'Priority Support'
         ],
-        popular: true
+        popular: true,
+        comingSoon: true
     },
     {
         id: 'premium',
         name: 'Premium',
-        price: 99,
-        amount: 9900,
+        priceLabel: '₹399',
+        amount: 39900,
         description: 'Perfect for people who need unlimited limits',
         features: [
             'Unlimited meetings per month',
@@ -56,7 +58,8 @@ const plans = [
             'Email Notifications',
             'Priority Support'
         ],
-        popular: false
+        popular: false,
+        comingSoon: true
     },
 
 ]
@@ -197,6 +200,9 @@ function Pricing() {
                 <div className='mt-8 grid grid-cols-1 lg:grid-cols-3 gap-5 items-stretch relative z-10'>
                     {plans.map((plan) => {
                         const isLoading = loading === plan.name
+                        const isFreePlan = plan.id === 'starter'
+                        const isComingSoon = plan.comingSoon
+                        const isDisabled = isLoading || isComingSoon || isFreePlan
 
                         return (
                             <div
@@ -221,10 +227,13 @@ function Pricing() {
                                     <div className='text-center mb-6'>
                                         <h3 className='text-lg font-semibold text-white mb-2 tracking-wide'>{plan.name}</h3>
                                         <div className='mb-3'>
-                                            <span className='text-5xl font-bold text-white'>${plan.price}</span>
-                                            <span className='text-white/45 text-sm ml-1'>/month</span>
+                                            <span className='text-5xl font-bold text-white'>{plan.priceLabel}</span>
+                                            {!isFreePlan && <span className='text-white/45 text-sm ml-1'>/month</span>}
                                         </div>
                                         <p className='text-sm text-white/55'>{plan.description}</p>
+                                        {isComingSoon && (
+                                            <p className='text-xs text-primary/85 mt-2'>Coming Soon — Razorpay integration pending</p>
+                                        )}
                                     </div>
 
                                     <div className='flex-1'>
@@ -248,14 +257,22 @@ function Pricing() {
                                             ? 'bg-primary text-primary-foreground shadow-[0_12px_26px_rgba(244,90,163,0.35)] hover:brightness-110'
                                             : 'bg-white/[0.06] text-white/80 border border-white/[0.16] hover:bg-white/[0.11] hover:border-primary/40'
                                             }`}
-                                        onClick={() => handleSubscribe(plan.amount, plan.name)}
-                                        disabled={isLoading}
+                                        onClick={() => {
+                                            if (!isDisabled) {
+                                                handleSubscribe(plan.amount, plan.name)
+                                            }
+                                        }}
+                                        disabled={isDisabled}
                                     >
                                         {isLoading ? (
                                             <span className='flex items-center justify-center gap-2'>
                                                 <Loader2 className='w-4 h-4 animate-spin' />
                                                 Processing...
                                             </span>
+                                        ) : isComingSoon ? (
+                                            'Coming Soon'
+                                        ) : isFreePlan ? (
+                                            'Free Plan'
                                         ) : (
                                             `Subscribe to ${plan.name}`
                                         )}
@@ -267,7 +284,7 @@ function Pricing() {
                 </div>
 
                 <div className='mt-8 max-w-3xl mx-auto text-center text-sm text-white/50 relative z-10'>
-                    No lock-in. Switch plans anytime. Access remains immediate after checkout.
+                    Starter is free. Pro and Premium are coming soon until Razorpay checkout is fully set up.
                 </div>
             </div>
         </div>

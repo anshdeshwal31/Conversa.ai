@@ -29,13 +29,21 @@ export async function POST(request: NextRequest) {
             const primaryEmail = email_addresses?.find((email: any) =>
                 email.id === event.data.primary_email_address_id
             )?.email_address
+            const fullName = [first_name, last_name].filter(Boolean).join(' ') || null
 
-            const newUser = await prisma.user.create({
-                data: {
+            const newUser = await prisma.user.upsert({
+                where: {
+                    clerkId: id
+                },
+                update: {
+                    email: primaryEmail || null,
+                    name: fullName
+                },
+                create: {
                     id: id,
                     clerkId: id,
                     email: primaryEmail || null,
-                    name: `${first_name} ${last_name}`
+                    name: fullName
                 }
             })
             console.log('user created', newUser.id, newUser.email)
