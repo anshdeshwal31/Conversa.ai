@@ -83,8 +83,7 @@ export function useMeetingDetail() {
                     setMeetingData(data)
 
                     if (isLoaded) {
-                        const ownerStatus = userId === data.userId
-                        setIsOwner(ownerStatus)
+                        setIsOwner(data.isOwner || false)
                         setUserChecked(true)
                     }
 

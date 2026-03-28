@@ -13,7 +13,7 @@
             },
             {
                 "end": 2.105,
-                "word": "Gowreesh,",
+                "word": "Ansh,",
                 "start": 1.685
             },
             {
@@ -409,7 +409,7 @@
             }
         ],
         "offset": 8.145,
-        "speaker": "Gowreesh Simhadri"
+        "speaker": "Ansh Deshwal"
     },
     {
         "words": [
@@ -926,7 +926,7 @@
             }
         ],
         "offset": 27.225,
-        "speaker": "Gowreesh Simhadri"
+        "speaker": "Ansh Deshwal"
     },
     {
         "words": [
@@ -1117,7 +1117,7 @@
             },
             {
                 "end": 41.325,
-                "word": "Gowreesh",
+                "word": "Ansh",
                 "start": 41.165
             },
             {
@@ -1428,7 +1428,7 @@
             }
         ],
         "offset": 44.745,
-        "speaker": "Gowreesh Simhadri"
+        "speaker": "Ansh Deshwal"
     },
     {
         "words": [
@@ -2005,7 +2005,7 @@
             }
         ],
         "offset": 62.045,
-        "speaker": "Gowreesh Simhadri"
+        "speaker": "Ansh Deshwal"
     },
     {
         "words": [
@@ -2527,7 +2527,7 @@
             }
         ],
         "offset": 78.205,
-        "speaker": "Gowreesh Simhadri"
+        "speaker": "Ansh Deshwal"
     },
     {
         "words": [
@@ -3154,7 +3154,7 @@
             }
         ],
         "offset": 93.245,
-        "speaker": "Gowreesh Simhadri"
+        "speaker": "Ansh Deshwal"
     },
     {
         "words": [
@@ -3346,7 +3346,7 @@
             }
         ],
         "offset": 108.265,
-        "speaker": "Gowreesh Simhadri"
+        "speaker": "Ansh Deshwal"
     },
     {
         "words": [
@@ -3668,7 +3668,7 @@
             }
         ],
         "offset": 115.825,
-        "speaker": "Gowreesh Simhadri"
+        "speaker": "Ansh Deshwal"
     },
     {
         "words": [
@@ -3809,7 +3809,7 @@
             },
             {
                 "end": 126.565,
-                "word": "Gowreesh.",
+                "word": "Ansh.",
                 "start": 126.385
             }
         ],
@@ -3945,6 +3945,6 @@
             }
         ],
         "offset": 127.145,
-        "speaker": "Gowreesh Simhadri"
+        "speaker": "Ansh Deshwal"
     }
 ]
