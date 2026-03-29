@@ -6,7 +6,12 @@
         "@prisma/client": "^5.0.0",
         "prisma": "^5.0.0"
     },
+    "devDependencies": {
+        "typescript": "^5.9.2"
+    },
     "scripts": {
-        "generate": "prisma generate"
+        "generate": "prisma generate --schema=./prisma/schema.prisma",
+        "build": "npx tsc lambda-chat-reset.ts --target ES2022 --module NodeNext --moduleResolution NodeNext --outDir .",
+        "typecheck": "npx tsc --noEmit lambda-chat-reset.ts --target ES2022 --module NodeNext --moduleResolution NodeNext"
     }
 }

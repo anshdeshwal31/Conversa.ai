@@ -9,7 +9,7 @@ function Settings() {
     const { user } = useUser()
     const { userId, isLoaded } = useAuth()
     const [botName, setBotName] = useState('Meeting Bot')
-    const [botImageUrl, setBotImageUrl] = useState(null)
+    const [botImageUrl, setBotImageUrl] = useState<string | null>(null)
     const [userPlan, setUserPlan] = useState('free')
     const [isLoading, setIsLoading] = useState(true)
     const [isSaving, setIsSaving] = useState(false)
@@ -28,13 +28,27 @@ function Settings() {
         }
     }, [userId, isLoaded])
 
+    const normalizeImageUrl = (value: unknown): string | null => {
+        if (typeof value !== 'string') {
+            return null
+        }
+
+        const normalized = value.trim()
+
+        if (!normalized || normalized === 'undefined' || normalized === 'null') {
+            return null
+        }
+
+        return normalized
+    }
+
     const fetchBotSettings = async () => {
         try {
             const response = await fetch('/api/user/bot-settings')
             if (response.ok) {
                 const data = await response.json()
                 setBotName(data.botName || 'Meeting Bot')
-                setBotImageUrl(data.botImageUrl || null)
+                setBotImageUrl(normalizeImageUrl(data.botImageUrl))
                 setUserPlan(data.plan || 'free')
             }
         } catch (error) {
@@ -67,7 +81,7 @@ function Settings() {
             const data = await response.json()
 
             if (response.ok) {
-                setBotImageUrl(data.url)
+                setBotImageUrl(normalizeImageUrl(data.url))
                 setHasChanges(true)
             } else {
                 console.error('image uploaded failed:', data.error)
@@ -89,7 +103,7 @@ function Settings() {
                 },
                 body: JSON.stringify({
                     botName,
-                    botImageUrl
+                    botImageUrl: normalizeImageUrl(botImageUrl)
                 })
             })
 
@@ -212,6 +226,7 @@ function Settings() {
                                         src={botImageUrl}
                                         alt='Bot Avatar'
                                         className='w-20 h-20 rounded-full object-cover'
+                                        onError={() => setBotImageUrl(null)}
                                     />
                                 ) : (
                                     <Bot className='h-10 w-10 text-white/60' />

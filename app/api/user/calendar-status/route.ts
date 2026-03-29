@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -9,9 +9,23 @@ export async function GET() {
             return NextResponse.json({ connected: false })
         }
 
-        const user = await prisma.user.findUnique({
+        const clerkUser = await currentUser()
+        const email = clerkUser?.primaryEmailAddress?.emailAddress ?? null
+        const name = clerkUser?.fullName ?? null
+
+        const user = await prisma.user.upsert({
             where: {
                 clerkId: userId
+            },
+            update: {
+                ...(email ? { email } : {}),
+                ...(name ? { name } : {})
+            },
+            create: {
+                id: userId,
+                clerkId: userId,
+                email,
+                name
             },
             select: {
                 calendarConnected: true,

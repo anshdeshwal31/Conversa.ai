@@ -1,4 +1,5 @@
 import { auth } from "@clerk/nextjs/server"
+import { currentUser } from "@clerk/nextjs/server"
 import { prisma } from "@/lib/db"
 import { NextResponse } from "next/server"
 
@@ -9,13 +10,23 @@ export async function GET() {
             return NextResponse.json({ error: "Not authenticated" }, { status: 401 })
         }
 
-        const user = await prisma.user.findUnique({
-            where: { clerkId: userId }
-        })
+        const clerkUser = await currentUser()
+        const email = clerkUser?.primaryEmailAddress?.emailAddress ?? null
+        const name = clerkUser?.fullName ?? null
 
-        if (!user) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 })
-        }
+        const user = await prisma.user.upsert({
+            where: { clerkId: userId },
+            update: {
+                ...(email ? { email } : {}),
+                ...(name ? { name } : {})
+            },
+            create: {
+                id: userId,
+                clerkId: userId,
+                email,
+                name
+            }
+        })
 
         const now = new Date()
         const upcomingMeetings = await prisma.meeting.findMany({

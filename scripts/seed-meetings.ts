@@ -1,7 +1,15 @@
 import * as path from "path";
 import * as fs from 'fs'
+import { loadEnvConfig } from "@next/env";
 import { prisma } from "@/lib/db";
 import { randomUUID } from "crypto";
+
+loadEnvConfig(process.cwd())
+
+function getCliArgValue(flag: string) {
+    const arg = process.argv.find((value) => value.startsWith(`${flag}=`))
+    return arg ? arg.slice(flag.length + 1) : null
+}
 
 async function seedMeetings() {
     try {
@@ -15,7 +23,16 @@ async function seedMeetings() {
         const actionItems = JSON.parse(fs.readFileSync(path.join(dataPath, 'action-items.json'), 'utf8'))
         const titles = JSON.parse(fs.readFileSync(path.join(dataPath, 'title.json'), 'utf8'))
 
-        const userId = 'user_2zRytJaBexiUzgf1VncfMZo4C1v'
+        const seededClerkId = process.env.SEED_CLERK_USER_ID || getCliArgValue('--clerkId')
+        const targetUser = seededClerkId
+            ? await prisma.user.findUnique({ where: { clerkId: seededClerkId } })
+            : await prisma.user.findFirst({ orderBy: { createdAt: 'asc' } })
+
+        if (!targetUser) {
+            throw new Error('No user found in database. Create an account first or provide SEED_CLERK_USER_ID / --clerkId=<clerk_user_id>.')
+        }
+
+        const userId = targetUser.id
         const recordingUrl = 'https://meetingbot1.s3.eu-north-1.amazonaws.com/test-audio.mp3'
 
         const now = new Date()
@@ -75,8 +92,11 @@ async function seedMeetings() {
                 }
             })
         }
+        console.log(`Seeded ${meetings.length} meetings for user ${targetUser.clerkId}.`)
     } catch (error) {
         console.error('error seeding meetings bruh', error)
+    } finally {
+        await prisma.$disconnect()
     }
 }
 

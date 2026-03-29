@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 export async function POST() {
@@ -9,11 +9,27 @@ export async function POST() {
             return NextResponse.json({ error: "Not authed" }, { status: 401 })
         }
 
-        await prisma.user.update({
+        const clerkUser = await currentUser()
+        const email = clerkUser?.primaryEmailAddress?.emailAddress ?? null
+        const name = clerkUser?.fullName ?? null
+
+        await prisma.user.upsert({
             where: {
                 clerkId: userId
             },
-            data: {
+            update: {
+                calendarConnected: false,
+                googleAccessToken: null,
+                googleRefreshToken: null,
+                googleTokenExpiry: null,
+                ...(email ? { email } : {}),
+                ...(name ? { name } : {})
+            },
+            create: {
+                id: userId,
+                clerkId: userId,
+                email,
+                name,
                 calendarConnected: false,
                 googleAccessToken: null,
                 googleRefreshToken: null,

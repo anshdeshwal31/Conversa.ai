@@ -2,6 +2,20 @@ import { prisma } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
+function sanitizeBotImageUrl(value: unknown): string | null {
+    if (typeof value !== 'string') {
+        return null
+    }
+
+    const normalized = value.trim()
+
+    if (!normalized || normalized === 'undefined' || normalized === 'null') {
+        return null
+    }
+
+    return normalized
+}
+
 export async function GET() {
     try {
         const user = await currentUser()
@@ -23,16 +37,16 @@ export async function GET() {
                 email: user.primaryEmailAddress?.emailAddress || null,
                 name: user.fullName || null
             },
-            select: {
-                botName: true,
-                botImageUrl: true,
-                currentPlan: true
-            }
+            // select: {
+            //     botName: true,
+            //     botImageUrl: true,
+            //     currentPlan: true
+            // }
         })
-
+        console.log({dbUser})
         return NextResponse.json({
             botName: dbUser?.botName || 'Meeting Bot',
-            botImageUrl: dbUser?.botImageUrl || null,
+            botImageUrl: dbUser.botImageUrl,
             plan: dbUser?.currentPlan || 'free'
         })
     } catch (error) {
@@ -50,6 +64,7 @@ export async function POST(request: Request) {
         }
 
         const { botName, botImageUrl } = await request.json()
+        const sanitizedBotImageUrl = sanitizeBotImageUrl(botImageUrl)
 
         await prisma.user.upsert({
             where: {
@@ -57,7 +72,7 @@ export async function POST(request: Request) {
             },
             update: {
                 botName: botName || 'Meeting Bot',
-                botImageUrl: botImageUrl,
+                botImageUrl: sanitizedBotImageUrl,
                 email: user.primaryEmailAddress?.emailAddress || null,
                 name: user.fullName || null
             },
@@ -67,7 +82,7 @@ export async function POST(request: Request) {
                 email: user.primaryEmailAddress?.emailAddress || null,
                 name: user.fullName || null,
                 botName: botName || 'Meeting Bot',
-                botImageUrl: botImageUrl
+                botImageUrl: sanitizedBotImageUrl
             },
         })
         return NextResponse.json({ success: true })
