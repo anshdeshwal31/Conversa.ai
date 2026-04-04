@@ -266,6 +266,7 @@ async function processEvent(user, event) {
     }
 }
 async function scheduleBotsForUpcomingMeetings() {
+    console.log("scheduleBotsForUpcomingMeetings is getting called ");
     const now = new Date();
     const fiveMinutesFromNow = new Date(now.getTime() + 5 * 60 * 1000);
     const upcomingMeetings = await prisma.meeting.findMany({
@@ -284,6 +285,8 @@ async function scheduleBotsForUpcomingMeetings() {
             user: true
         }
     });
+    if (!upcomingMeetings)
+        console.log("there are no upcoming meetings , this is inside scheduleBotsForUpcomingMeetings");
     for (const meeting of upcomingMeetings) {
         try {
             const canSchedule = await canUserScheduleMeeting(meeting.user);
@@ -323,8 +326,11 @@ async function scheduleBotsForUpcomingMeetings() {
                 body: JSON.stringify(requestBody)
             });
             if (!response.ok) {
+                console.log("meetingBaas api failed");
+                console.log({ response });
                 throw new Error(`meeting baas api req failed: ${response.status}`);
             }
+            console.log("MeetingBaaS api call succeded");
             const data = await response.json();
             await prisma.meeting.update({
                 where: {
@@ -346,9 +352,9 @@ async function scheduleBotsForUpcomingMeetings() {
 async function canUserScheduleMeeting(user) {
     try {
         const PLAN_LIMITS = {
-            free: { meetings: 10 },
-            starter: { meetings: 10 },
-            pro: { meetings: 30 },
+            free: { meetings: 20 },
+            starter: { meetings: 35 },
+            pro: { meetings: 50 },
             premium: { meetings: -1 }
         };
         const limits = PLAN_LIMITS[user.currentPlan] || PLAN_LIMITS.free;

@@ -323,8 +323,11 @@ async function scheduleBotsForUpcomingMeetings() {
                 body: JSON.stringify(requestBody)
             });
             if (!response.ok) {
+                console.log("meetingBaas api failed");
+                console.log({ response });
                 throw new Error(`meeting baas api req failed: ${response.status}`);
             }
+            console.log("MeetingBaaS api call succeded");
             const data = await response.json();
             await prisma.meeting.update({
                 where: {

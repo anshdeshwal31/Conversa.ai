@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
                 return NextResponse.json({ error: 'meeting not found' }, { status: 404 })
             }
 
-            await incrementMeetingUsage(meeting.userId)
+            // await incrementMeetingUsage(meeting.userId)
 
             if (!meeting.user.email) {
                 console.error('user email not found for this meeting', meeting.id)
