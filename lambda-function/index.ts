@@ -340,7 +340,7 @@ async function scheduleBotsForUpcomingMeetings() {
             }
 
             console.log("meeting Baas api key: ", process.env.MEETING_BAAS_API_KEY)
-            const response = await fetch('https://api.meetingbaas.com/bots', {
+            const response = await fetch('https://api.meetingbaas.com/v2/bots', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

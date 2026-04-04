@@ -4,12 +4,30 @@ import { sendMeetingSummaryEmail } from "@/lib/email-service-free";
 import { processTranscript } from "@/lib/rag";
 import { incrementMeetingUsage } from "@/lib/usage";
 import { NextRequest, NextResponse } from "next/server";
+import { Webhook } from "svix";
 
 export async function POST(request: NextRequest) {
     try {
-        const webhook = await request.json()
+        const payload = await request.text()
+        const headers = {
+            "svix-id": request.headers.get("svix-id") || "",
+            "svix-timestamp": request.headers.get("svix-timestamp") || "",
+            "svix-signature": request.headers.get("svix-signature") || "",
+        }
 
-        if (webhook.event === 'complete') {
+        const webhookSecret = process.env.MEETINGBAAS_WEBHOOK_SECRET || process.env.MEETING_BAAS_WEBHOOK_SECRET
+        if (webhookSecret) {
+            const wh = new Webhook(webhookSecret)
+            try {
+                wh.verify(payload, headers)
+            } catch {
+                return NextResponse.json({ error: "Invalid Signature" }, { status: 400 })
+            }
+        }
+
+        const webhook = JSON.parse(payload)
+
+        if (webhook.event === 'bot.completed' || webhook.event === 'complete') {
             const webhookData = webhook.data
 
             const meeting = await prisma.meeting.findFirst({

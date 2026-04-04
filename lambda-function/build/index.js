@@ -317,7 +317,8 @@ async function scheduleBotsForUpcomingMeetings() {
             if (meeting.user.botImageUrl) {
                 requestBody.bot_image = meeting.user.botImageUrl;
             }
-            const response = await fetch('https://api.meetingbaas.com/bots', {
+            console.log("meeting Baas api key: ", process.env.MEETING_BAAS_API_KEY);
+            const response = await fetch('https://api.meetingbaas.com/v2/bots', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -331,6 +332,7 @@ async function scheduleBotsForUpcomingMeetings() {
                 throw new Error(`meeting baas api req failed: ${response.status}`);
             }
             console.log("MeetingBaaS api call succeded");
+            console.log({ response });
             const data = await response.json();
             await prisma.meeting.update({
                 where: {
