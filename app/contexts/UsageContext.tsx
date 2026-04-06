@@ -28,9 +28,9 @@ interface UsageContextType {
 }
 
 const PLAN_LIMITS: Record<string, PlanLimits> = {
-    free: { meetings: 10, chatMessages: 30 },
-    starter: { meetings: 10, chatMessages: 30 },
-    pro: { meetings: 30, chatMessages: 100 },
+    free: { meetings: 30, chatMessages: 30 },
+    starter: { meetings: 50, chatMessages: 50 },
+    pro: { meetings: 100, chatMessages: 100 },
     premium: { meetings: -1, chatMessages: -1 }
 }
 

@@ -305,10 +305,11 @@ async function scheduleBotsForUpcomingMeetings() {
             const requestBody = {
                 meeting_url: meeting.meetingUrl,
                 bot_name: meeting.user.botName || 'AI Noteetaker',
-                reserved: false,
                 recording_mode: 'speaker_view',
-                speech_to_text: { provider: "Default" },
-                webhook_url: process.env.WEBHOOK_URL,
+                transcription_enabled: true,
+                transcription_config: {
+                    provider: 'gladia'
+                },
                 extra: {
                     meeting_id: meeting.id,
                     user_id: meeting.userId
@@ -334,13 +335,17 @@ async function scheduleBotsForUpcomingMeetings() {
             console.log("MeetingBaaS api call succeded");
             console.log({ response });
             const data = await response.json();
+            const botId = data?.bot_id || data?.data?.bot_id || data?.id;
+            if (!botId) {
+                throw new Error('meeting baas api response missing bot id');
+            }
             await prisma.meeting.update({
                 where: {
                     id: meeting.id
                 },
                 data: {
                     botSent: true,
-                    botId: data.bot_id,
+                    botId: botId,
                     botJoinedAt: new Date()
                 }
             });
@@ -354,9 +359,9 @@ async function scheduleBotsForUpcomingMeetings() {
 async function canUserScheduleMeeting(user) {
     try {
         const PLAN_LIMITS = {
-            free: { meetings: 20 },
-            starter: { meetings: 35 },
-            pro: { meetings: 50 },
+            free: { meetings: 30 },
+            starter: { meetings: 50 },
+            pro: { meetings: 100 },
             premium: { meetings: -1 }
         };
         const limits = PLAN_LIMITS[user.currentPlan] || PLAN_LIMITS.free;

@@ -18,8 +18,8 @@ const plans = [
         amount: 0,
         description: 'Perfect for people getting started',
         features: [
-            '10 meetings per month',
-            '30 AI chat messages per day',
+            '50 meetings per month',
+            '50 AI chat messages per day',
             'Meeting transcripts and summaries',
             'Action items extraction',
             'Email Notifications'
@@ -34,7 +34,7 @@ const plans = [
         amount: 19900,
         description: 'Perfect for people growing who need more power',
         features: [
-            '30 meetings per month',
+            '100 meetings per month',
             '100 AI chat messages per day',
             'Meeting transcripts and summaries',
             'Action items extraction',

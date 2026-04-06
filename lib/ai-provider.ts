@@ -11,10 +11,26 @@ function getGeminiApiKey() {
     return key
 }
 
-const embeddingsModel = new GoogleGenerativeAIEmbeddings({
-    apiKey: getGeminiApiKey(),
-    model: 'text-embedding-004'
-})
+function getEmbeddingModelCandidates() {
+    const configuredModel = process.env.GEMINI_EMBEDDING_MODEL || process.env.GOOGLE_EMBEDDING_MODEL
+
+    return Array.from(new Set([
+        configuredModel,
+        'embedding-001',
+        'text-embedding-004'
+    ].filter((model): model is string => Boolean(model && model.trim()))))
+}
+
+function createEmbeddingsModel(model: string) {
+    return new GoogleGenerativeAIEmbeddings({
+        apiKey: getGeminiApiKey(),
+        model
+    })
+}
+
+function isValidEmbeddingVector(value: unknown) {
+    return Array.isArray(value) && value.length > 0 && value.every(item => typeof item === 'number' && Number.isFinite(item))
+}
 
 function createChatModel(temperature: number, maxOutputTokens: number) {
     return new ChatGoogleGenerativeAI({
@@ -53,11 +69,50 @@ function getMessageText(content: unknown) {
 }
 
 export async function createEmbedding(text: string) {
-    return embeddingsModel.embedQuery(text)
+    const candidates = getEmbeddingModelCandidates()
+    const failures: string[] = []
+
+    for (const model of candidates) {
+        try {
+            const vector = await createEmbeddingsModel(model).embedQuery(text)
+
+            if (isValidEmbeddingVector(vector)) {
+                return vector
+            }
+
+            failures.push(`${model}: returned empty/invalid vector`)
+        } catch (error) {
+            failures.push(`${model}: ${(error as Error)?.message || 'unknown embedding error'}`)
+        }
+    }
+
+    throw new Error(`Unable to generate query embedding. Tried models: ${failures.join(' | ')}`)
 }
 
 export async function createManyEmbeddings(texts: string[]) {
-    return embeddingsModel.embedDocuments(texts)
+    const candidates = getEmbeddingModelCandidates()
+    const failures: string[] = []
+
+    for (const model of candidates) {
+        try {
+            const vectors = await createEmbeddingsModel(model).embedDocuments(texts)
+
+            const allValid =
+                Array.isArray(vectors) &&
+                vectors.length === texts.length &&
+                vectors.every(vector => isValidEmbeddingVector(vector))
+
+            if (allValid) {
+                return vectors
+            }
+
+            failures.push(`${model}: returned incomplete/invalid batch embeddings`)
+        } catch (error) {
+            failures.push(`${model}: ${(error as Error)?.message || 'unknown embedding error'}`)
+        }
+    }
+
+    throw new Error(`Unable to generate batch embeddings. Tried models: ${failures.join(' | ')}`)
 }
 
 export async function chatWithAI(systemPrompt: string, userQuestion: string) {

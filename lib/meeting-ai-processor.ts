@@ -1,5 +1,6 @@
 import { HumanMessage, SystemMessage } from '@langchain/core/messages'
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai'
+import { transcriptToText } from './transcript-utils'
 
 function getGeminiApiKey() {
     const key = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY
@@ -58,17 +59,7 @@ function extractJsonObject(text: string) {
 
 export async function processMeetingTranscript(transcript: any) {
     try {
-        let transcriptText = ''
-
-        if (Array.isArray(transcript)) {
-            transcriptText = transcript
-                .map((item: any) => `${item.speaker || 'Speaker'}: ${item.words.map((w: any) => w.word).join(' ')}`)
-                .join('\n')
-        } else if (typeof transcript === 'string') {
-            transcriptText = transcript
-        } else if (transcript.text) {
-            transcriptText = transcript.text
-        }
+        const transcriptText = transcriptToText(transcript)
 
         if (!transcriptText || transcriptText.trim().length === 0) {
             throw new Error('No transcript content found')

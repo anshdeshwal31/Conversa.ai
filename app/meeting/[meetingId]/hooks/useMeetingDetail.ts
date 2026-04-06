@@ -1,4 +1,5 @@
 import { useChatCore } from "@/app/hooks/chat/useChatCore"
+import { transcriptToText } from "@/lib/transcript-utils"
 import { useAuth } from "@clerk/nextjs"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -114,13 +115,10 @@ export function useMeetingDetail() {
                 const meeting = await meetingResponse.json()
 
                 if (meeting.transcript && !meeting.ragProcessed && userId == meeting.userId) {
-                    let transcriptText = ''
-                    if (typeof meeting.transcript === 'string') {
-                        transcriptText = meeting.transcript
-                    } else if (Array.isArray(meeting.transcript)) {
-                        transcriptText = meeting.transcript
-                            .map((segment: any) => `${segment.speaker}: ${segment.words.map((w: any) => w.word).join(' ')}`)
-                            .join('\n')
+                    const transcriptText = transcriptToText(meeting.transcript)
+
+                    if (!transcriptText.trim()) {
+                        return
                     }
 
                     await fetch('/api/rag/process', {

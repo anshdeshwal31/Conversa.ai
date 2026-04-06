@@ -33,12 +33,6 @@ function MeetingHeader({
         try {
             setIsPosting(true)
 
-            toast("✅ Posted to Slack", {
-                action: {
-                    label: "OK",
-                    onClick: () => { },
-                },
-            })
             const response = await fetch('/api/slack/post-meeting', {
                 method: 'POST',
                 headers: {
@@ -51,15 +45,22 @@ function MeetingHeader({
                 })
             })
 
-            const result = await response.json()
+            const result = await response.json().catch(() => ({}))
 
             if (response.ok) {
-
+                toast.success('Posted to Slack', {
+                    description: result.message || 'Meeting summary was sent to your Slack channel.'
+                })
             } else {
-
+                toast.error('Failed to post to Slack', {
+                    description: result.error || 'Please reconnect Slack or choose a valid channel in Integrations.'
+                })
             }
         } catch (error) {
-
+            console.error('slack post error:', error)
+            toast.error('Failed to post to Slack', {
+                description: 'Something went wrong while posting. Please try again.'
+            })
         } finally {
             setIsPosting(false)
         }

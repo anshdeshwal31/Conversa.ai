@@ -3,6 +3,10 @@ import { chatWithAI, createEmbedding, createManyEmbeddings } from "./ai-provider
 import { saveManyVectors, searchVectors } from "./pinecone";
 import { chunkTranscript, extractSpeaker } from "./text-chunker";
 
+function hasEmbeddingValues(value: unknown) {
+    return Array.isArray(value) && value.length > 0 && value.every(item => typeof item === 'number' && Number.isFinite(item))
+}
+
 export async function processTranscript(
     meetingId: string,
     userId: string,
@@ -10,10 +14,39 @@ export async function processTranscript(
     meetingTitle?: string
 ) {
     const chunks = chunkTranscript(transcript)
+        .filter(chunk => typeof chunk.content === 'string' && chunk.content.trim().length > 0)
+
+    if (chunks.length === 0) {
+        console.warn('processTranscript: no usable chunks found, skipping vector indexing', { meetingId })
+        return
+    }
 
     const texts = chunks.map(chunk => chunk.content)
 
-    const embeddings = await createManyEmbeddings(texts)
+    let embeddings = await createManyEmbeddings(texts)
+
+    const hasMissingBatchEmbeddings =
+        !Array.isArray(embeddings) ||
+        embeddings.length !== texts.length ||
+        embeddings.some(embedding => !Array.isArray(embedding) || embedding.length === 0)
+
+    if (hasMissingBatchEmbeddings) {
+        console.warn('processTranscript: falling back to one-by-one embeddings due to incomplete batch response', {
+            meetingId,
+            textCount: texts.length,
+            embeddingCount: Array.isArray(embeddings) ? embeddings.length : 0
+        })
+
+        embeddings = await Promise.all(
+            texts.map(async (text) => {
+                try {
+                    return await createEmbedding(text)
+                } catch {
+                    return []
+                }
+            })
+        )
+    }
 
     const dbChunks = chunks.map((chunk) => ({
         meetingId,
@@ -30,7 +63,7 @@ export async function processTranscript(
 
     const vectors = chunks.map((chunk, index) => ({
         id: `${meetingId}_chunk_${chunk.chunkIndex}`,
-        embedding: embeddings[index],
+        embedding: Array.isArray(embeddings[index]) ? embeddings[index] : [],
         metadata: {
             meetingId,
             userId,
@@ -41,6 +74,12 @@ export async function processTranscript(
 
         }
     }))
+
+    const hasAnyValidVector = vectors.some(vector => hasEmbeddingValues(vector.embedding))
+
+    if (!hasAnyValidVector) {
+        throw new Error(`processTranscript: no valid embeddings generated for meeting ${meetingId}`)
+    }
 
     await saveManyVectors(vectors)
 }

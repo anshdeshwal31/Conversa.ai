@@ -266,6 +266,7 @@ async function processEvent(user, event) {
     }
 }
 async function scheduleBotsForUpcomingMeetings() {
+    console.log("scheduleBotsForUpcomingMeetings is getting called ");
     const now = new Date();
     const fiveMinutesFromNow = new Date(now.getTime() + 5 * 60 * 1000);
     const upcomingMeetings = await prisma.meeting.findMany({
@@ -284,6 +285,8 @@ async function scheduleBotsForUpcomingMeetings() {
             user: true
         }
     });
+    if (!upcomingMeetings)
+        console.log("there are no upcoming meetings , this is inside scheduleBotsForUpcomingMeetings");
     for (const meeting of upcomingMeetings) {
         try {
             const canSchedule = await canUserScheduleMeeting(meeting.user);
@@ -302,10 +305,11 @@ async function scheduleBotsForUpcomingMeetings() {
             const requestBody = {
                 meeting_url: meeting.meetingUrl,
                 bot_name: meeting.user.botName || 'AI Noteetaker',
-                reserved: false,
                 recording_mode: 'speaker_view',
-                speech_to_text: { provider: "Default" },
-                webhook_url: process.env.WEBHOOK_URL,
+                transcription_enabled: true,
+                transcription_config: {
+                    provider: 'gladia'
+                },
                 extra: {
                     meeting_id: meeting.id,
                     user_id: meeting.userId
@@ -314,7 +318,8 @@ async function scheduleBotsForUpcomingMeetings() {
             if (meeting.user.botImageUrl) {
                 requestBody.bot_image = meeting.user.botImageUrl;
             }
-            const response = await fetch('https://api.meetingbaas.com/bots', {
+            console.log("meeting Baas api key: ", process.env.MEETING_BAAS_API_KEY);
+            const response = await fetch('https://api.meetingbaas.com/v2/bots', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -328,14 +333,19 @@ async function scheduleBotsForUpcomingMeetings() {
                 throw new Error(`meeting baas api req failed: ${response.status}`);
             }
             console.log("MeetingBaaS api call succeded");
+            console.log({ response });
             const data = await response.json();
+            const botId = data?.bot_id || data?.data?.bot_id || data?.id;
+            if (!botId) {
+                throw new Error('meeting baas api response missing bot id');
+            }
             await prisma.meeting.update({
                 where: {
                     id: meeting.id
                 },
                 data: {
                     botSent: true,
-                    botId: data.bot_id,
+                    botId: botId,
                     botJoinedAt: new Date()
                 }
             });
@@ -349,9 +359,9 @@ async function scheduleBotsForUpcomingMeetings() {
 async function canUserScheduleMeeting(user) {
     try {
         const PLAN_LIMITS = {
-            free: { meetings: 10 },
-            starter: { meetings: 10 },
-            pro: { meetings: 30 },
+            free: { meetings: 30 },
+            starter: { meetings: 50 },
+            pro: { meetings: 100 },
             premium: { meetings: -1 }
         };
         const limits = PLAN_LIMITS[user.currentPlan] || PLAN_LIMITS.free;

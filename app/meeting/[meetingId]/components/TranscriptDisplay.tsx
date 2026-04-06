@@ -7,9 +7,12 @@ interface TranscriptWord {
 }
 
 interface TranscriptSegment {
-    words: TranscriptWord[]
+    words?: TranscriptWord[]
     offset: number
     speaker: string
+    text?: string
+    start?: number
+    end?: number
 }
 
 interface TranscriptDisplayProps {
@@ -26,14 +29,25 @@ export default function TranscriptDisplay({ transcript }: TranscriptDisplayProps
     }
 
     const getSpeakerSegmentTime = (segment: TranscriptSegment) => {
-        const startTime = segment.offset
-        const endTime = segment.words[segment.words.length - 1]?.end || segment.offset
+        const startTime = Number.isFinite(segment.offset) ? segment.offset : (segment.start || 0)
+        const endFromWords = Array.isArray(segment.words) && segment.words.length > 0
+            ? segment.words[segment.words.length - 1]?.end
+            : undefined
+        const endTime = typeof endFromWords === 'number' ? endFromWords : (segment.end || startTime)
 
         return `${formatTime(startTime)} - ${formatTime(endTime)}`
     }
 
     const getSegmentText = (segment: TranscriptSegment) => {
-        return segment.words.map(word => word.word).join(' ')
+        if (typeof segment.text === 'string' && segment.text.trim()) {
+            return segment.text.trim()
+        }
+
+        if (Array.isArray(segment.words)) {
+            return segment.words.map(word => word.word).join(' ')
+        }
+
+        return ''
     }
 
     if (!transcript || transcript.length === 0) {
