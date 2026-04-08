@@ -30,14 +30,9 @@ function ActionItems({
     } = useActionItems(meetingId)
 
     const addToIntegration = async (platform: string, actionItem: ActionItem) => {
+        const platformLabel = platform.charAt(0).toUpperCase() + platform.slice(1)
         setLoading(prev => ({ ...prev, [`${platform}-${actionItem.id}`]: true }))
         try {
-            toast(`✅ Action item added to ${platform}`, {
-                action: {
-                    label: "OK",
-                    onClick: () => { },
-                },
-            })
             const response = await fetch('/api/integrations/action-items', {
                 method: 'POST',
                 headers: {
@@ -48,6 +43,23 @@ function ActionItems({
                     actionItem: actionItem.text,
                     meetingId
                 })
+            })
+
+            const result = await response.json().catch(() => ({}))
+
+            if (response.ok) {
+                toast.success(`Added to ${platformLabel}`, {
+                    description: result.message || `Action item was added to ${platformLabel} successfully.`
+                })
+            } else {
+                toast.error(`Failed to add to ${platformLabel}`, {
+                    description: result.error || `Please reconnect ${platformLabel} or verify your project/board setup in Integrations.`
+                })
+            }
+        } catch (error) {
+            console.error(`failed to add action item to ${platform}:`, error)
+            toast.error(`Failed to add to ${platformLabel}`, {
+                description: 'Something went wrong while adding the action item. Please try again.'
             })
         } finally {
             setLoading(prev => ({ ...prev, [`${platform}-${actionItem.id}`]: false }))
@@ -60,49 +72,62 @@ function ActionItems({
         }
 
         try {
-            toast(`✅ Action item added`, {
-                action: {
-                    label: "OK",
-                    onClick: () => { },
-                },
-            })
+            const text = newItemText.trim()
             const response = await fetch(`/api/meetings/${meetingId}/action-items`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    text: newItemText
+                    text
                 })
             })
 
+            const result = await response.json().catch(() => ({}))
+
             if (response.ok) {
-                onAddItem(newItemText)
+                onAddItem(text)
                 setNewItemText('')
                 setShowAddInput(false)
+                toast.success('Action item added', {
+                    description: result.message || 'Your custom action item was added successfully.'
+                })
+            } else {
+                toast.error('Failed to add action item', {
+                    description: result.error || 'Please try again in a moment.'
+                })
             }
         } catch (error) {
             console.error('failed to add action item:', error)
+            toast.error('Failed to add action item', {
+                description: 'Something went wrong while adding the action item. Please try again.'
+            })
         }
     }
 
     const handleDeleteItem = async (id: number) => {
         try {
-            toast(`✅ Action item deleted`, {
-                action: {
-                    label: "OK",
-                    onClick: () => { },
-                },
-            })
             const response = await fetch(`/api/meetings/${meetingId}/action-items/${id}`, {
                 method: 'DELETE'
             })
 
+            const result = await response.json().catch(() => ({}))
+
             if (response.ok) {
                 onDeleteItem(id)
+                toast.success('Action item deleted', {
+                    description: result.message || 'The action item was removed successfully.'
+                })
+            } else {
+                toast.error('Failed to delete action item', {
+                    description: result.error || 'Please try again in a moment.'
+                })
             }
         } catch (error) {
             console.error('failed to delete action item:', error)
+            toast.error('Failed to delete action item', {
+                description: 'Something went wrong while deleting the action item. Please try again.'
+            })
         }
     }
 

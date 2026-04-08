@@ -8,6 +8,8 @@ export async function GET(request: NextRequest) {
         const code = searchParams.get('code')
         const error = searchParams.get('error')
         const state = searchParams.get('state')
+        const stateParams = new URLSearchParams(state || '')
+        const stateClerkId = stateParams.get('clerkId')
 
         const host = request.headers.get('host')
         const isLocal = host?.includes('localhost') //maybe use NODE_ENV here?
@@ -70,11 +72,35 @@ export async function GET(request: NextRequest) {
         try {
             const slack = new WebClient(tokenData.access_token)
             const userInfo = await slack.users.info({ user: tokenData.authed_user.id })
+            const profileEmail = userInfo.user?.profile?.email || null
+            const profileName = userInfo.user?.real_name || userInfo.user?.name || null
 
-            if (userInfo.user?.profile?.email) {
+            if (stateClerkId) {
+                await prisma.user.upsert({
+                    where: {
+                        clerkId: stateClerkId
+                    },
+                    update: {
+                        ...(profileEmail ? { email: profileEmail } : {}),
+                        ...(profileName ? { name: profileName } : {}),
+                        slackUserId: tokenData.authed_user.id,
+                        slackTeamId: tokenData.team.id,
+                        slackConnected: true
+                    },
+                    create: {
+                        id: stateClerkId,
+                        clerkId: stateClerkId,
+                        email: profileEmail,
+                        name: profileName,
+                        slackUserId: tokenData.authed_user.id,
+                        slackTeamId: tokenData.team.id,
+                        slackConnected: true
+                    }
+                })
+            } else if (profileEmail) {
                 await prisma.user.updateMany({
                     where: {
-                        email: userInfo.user.profile.email
+                        email: profileEmail
                     },
                     data: {
                         slackUserId: tokenData.authed_user.id,
@@ -87,7 +113,7 @@ export async function GET(request: NextRequest) {
             console.error('failed to link user during oauth:', error)
         }
 
-        const returnTo = state?.startsWith('return=') ? state.split('return=')[1] : null
+        const returnTo = stateParams.get('return')
 
         if (returnTo === 'integrations') {
             return NextResponse.redirect(`${baseUrl}/integrations?setup=slack`)

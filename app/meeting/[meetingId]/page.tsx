@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useMeetingDetail } from './hooks/useMeetingDetail'
 import MeetingHeader from './components/MeetingHeader'
 import MeetingInfo from './components/MeetingInfo'
@@ -10,6 +10,9 @@ import ChatSidebar from './components/ChatSidebar'
 import CustomAudioPlayer from './components/AudioPlayer'
 
 function MeetingDetail() {
+    const [chatPanelWidth, setChatPanelWidth] = useState(420)
+    const [isResizing, setIsResizing] = useState(false)
+    const splitContainerRef = useRef<HTMLDivElement | null>(null)
 
     const {
         meetingId,
@@ -31,6 +34,40 @@ function MeetingDetail() {
         meetingInfoData
     } = useMeetingDetail()
 
+    const showResizableChat = userChecked && isOwner
+
+    useEffect(() => {
+        if (!isResizing) {
+            return
+        }
+
+        const handleMouseMove = (event: MouseEvent) => {
+            const container = splitContainerRef.current
+            if (!container) {
+                return
+            }
+
+            const rect = container.getBoundingClientRect()
+            const minWidth = 340
+            const maxWidth = Math.max(minWidth, Math.min(760, rect.width - 360))
+            const nextWidth = rect.right - event.clientX
+            const clampedWidth = Math.min(maxWidth, Math.max(minWidth, nextWidth))
+            setChatPanelWidth(clampedWidth)
+        }
+
+        const handleMouseUp = () => {
+            setIsResizing(false)
+        }
+
+        window.addEventListener('mousemove', handleMouseMove)
+        window.addEventListener('mouseup', handleMouseUp)
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove)
+            window.removeEventListener('mouseup', handleMouseUp)
+        }
+    }, [isResizing])
+
     return (
         <div className='min-h-screen'>
 
@@ -42,7 +79,7 @@ function MeetingDetail() {
                 isOwner={isOwner}
                 isLoading={!userChecked}
             />
-            <div className='surface-frame flex h-[calc(100vh-73px)] overflow-hidden'>
+            <div ref={splitContainerRef} className='surface-frame flex h-[calc(100vh-73px)] overflow-hidden'>
                 <div className={`flex-1 p-6 overflow-auto pb-24 ambient-panel ${!userChecked
                     ? ''
                     : !isOwner
@@ -180,16 +217,30 @@ function MeetingDetail() {
                             </div>
                         </div>
                     </div>
-                ) : isOwner && (
-                    <ChatSidebar
-                        messages={messages}
-                        chatInput={chatInput}
-                        showSuggestions={showSuggestions}
-                        onInputChange={handleInputChange}
-                        onSendMessage={handleSendMessage}
-                        onSuggestionClick={handleSuggestionClick}
-                    />
-                )}
+                ) : showResizableChat ? (
+                    <>
+                        <div
+                            onMouseDown={() => setIsResizing(true)}
+                            className={`relative w-2 cursor-col-resize border-l border-r border-white/[0.08] transition-colors ${isResizing ? 'bg-sky-400/30' : 'bg-white/[0.02] hover:bg-white/[0.12]'}`}
+                            role='separator'
+                            aria-orientation='vertical'
+                            aria-label='Resize chat panel'
+                        >
+                            <div className='absolute inset-y-0 left-1/2 -translate-x-1/2 w-px bg-white/35' />
+                        </div>
+
+                        <div className='shrink-0 h-full min-w-0' style={{ width: `${chatPanelWidth}px` }}>
+                            <ChatSidebar
+                                messages={messages}
+                                chatInput={chatInput}
+                                showSuggestions={showSuggestions}
+                                onInputChange={handleInputChange}
+                                onSendMessage={handleSendMessage}
+                                onSuggestionClick={handleSuggestionClick}
+                            />
+                        </div>
+                    </>
+                ) : null}
 
             </div>
 

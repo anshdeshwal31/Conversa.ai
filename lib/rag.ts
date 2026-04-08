@@ -118,7 +118,11 @@ export async function chatWithMeeting(
     Here's what was discussed:
     ${context}
 
-    Answer the user's question based only on the meeting content above. If the answer isn't in the meeting, say so`
+    Answer the user's question based only on the meeting content above. If the answer isn't in the meeting, say so.
+    Format rules:
+    - Use plain text only (no markdown symbols like ** or #).
+    - Use short paragraphs.
+    - If listing points, put each point on a new line starting with "• ".`
 
     const answer = await chatWithAI(systemPrompt, question)
 
@@ -159,7 +163,11 @@ export async function chatWithAllMeetings(
     Here's what was discussed across their meetings:
     ${context}
 
-    Answer the user's question based only on the meeting content above. When you reference something, mention which meetings its from.`
+    Answer the user's question based only on the meeting content above. When you reference something, mention which meetings its from.
+    Format rules:
+    - Use plain text only (no markdown symbols like ** or #).
+    - Use short paragraphs.
+    - If listing points, put each point on a new line starting with "• ".`
 
     const answer = await chatWithAI(systemPrompt, question)
 

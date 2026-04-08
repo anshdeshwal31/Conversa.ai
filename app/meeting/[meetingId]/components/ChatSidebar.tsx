@@ -34,7 +34,7 @@ function ChatSidebar({
         "Summarize the key action items from this meeting"
     ]
     return (
-        <div className='w-96 border-l border-white/[0.08] bg-[#0F0F15] flex flex-col'>
+        <div className='w-full h-full border-l border-white/[0.08] bg-[#0F0F15] flex flex-col'>
 
             <div className='p-4 border-b border-white/[0.08]'>
                 <h3 className='font-semibold text-white'>
@@ -57,7 +57,7 @@ function ChatSidebar({
                                 : 'bg-white/[0.08] border border-white/[0.14] text-white'
                                 }`}
                         >
-                            <p className='text-sm'>{message.content}</p>
+                            <p className='text-sm whitespace-pre-wrap break-words leading-relaxed'>{message.content}</p>
                         </div>
                     </div>
                 ))}

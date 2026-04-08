@@ -13,6 +13,16 @@ interface UseChatCoreOptions {
     getRequestBody: (input: string) => any
 }
 
+function formatAssistantMessage(content: string) {
+    return content
+        .replace(/\*\*(.*?)\*\*/g, '$1')
+        .replace(/\r/g, '')
+        .replace(/\s\*\s+(?=[A-Za-z0-9])/g, '\n• ')
+        .replace(/^\*\s+/gm, '• ')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim()
+}
+
 export function useChatCore({
     apiEndpoint,
     getRequestBody,
@@ -65,7 +75,7 @@ export function useChatCore({
 
                 const botMessage: ChatMessage = {
                     id: messages.length + 2,
-                    content: data.answer || data.response,
+                    content: formatAssistantMessage(data.answer || data.response || 'No answer generated.'),
                     isBot: true,
                     timestamp: new Date()
                 }

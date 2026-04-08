@@ -76,17 +76,17 @@ function MeetingHeader({
             await navigator.clipboard.writeText(shareUrl)
 
             setCopied(true)
-            toast("✅ Meeting link copied!", {
-                action: {
-                    label: "OK",
-                    onClick: () => { },
-                },
+            toast.success('Meeting link copied', {
+                description: 'Shareable meeting link was copied to your clipboard.'
             })
 
             setTimeout(() => setCopied(false), 2000)
 
         } catch (error) {
             console.error('failed to copy:', error)
+            toast.error('Failed to copy meeting link', {
+                description: 'Please try copying the link again.'
+            })
 
         }
     }
@@ -98,28 +98,30 @@ function MeetingHeader({
 
         try {
             setIsDeleting(true)
-            toast("✅ Meeting Deleted", {
-                action: {
-                    label: "OK",
-                    onClick: () => { },
-                },
-            })
             const response = await fetch(`/api/meetings/${meetingId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
-            const result = await response.json()
+            const result = await response.json().catch(() => ({}))
 
             if (response.ok) {
+                toast.success('Meeting deleted', {
+                    description: result.message || 'The meeting was deleted successfully.'
+                })
                 router.push('/home')
             } else {
-
+                toast.error('Failed to delete meeting', {
+                    description: result.error || 'Please try again in a moment.'
+                })
             }
 
         } catch (error) {
             console.error('delete error', error)
+            toast.error('Failed to delete meeting', {
+                description: 'Something went wrong while deleting. Please try again.'
+            })
 
         } finally {
             setIsDeleting(false)
