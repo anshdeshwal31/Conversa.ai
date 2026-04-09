@@ -1,6 +1,6 @@
 'use client'
 
-import { SignInButton, SignUpButton, useUser } from "@clerk/nextjs"
+import { useUser } from "@clerk/nextjs"
 import { ArrowRight, Orbit, Play } from "lucide-react"
 import Link from "next/link"
 
@@ -40,12 +40,10 @@ export default function HeroSection() {
                                     <ArrowRight className='w-4 h-4' />
                                 </Link>
                             ) : (
-                                <SignUpButton mode='modal'>
-                                    <button className='mono-btn-solid inline-flex items-center gap-2 cursor-pointer' type='button'>
-                                        Start Free
-                                        <ArrowRight className='w-4 h-4' />
-                                    </button>
-                                </SignUpButton>
+                                <Link href='/sign-up' className='mono-btn-solid inline-flex items-center gap-2 cursor-pointer'>
+                                    Start Free
+                                    <ArrowRight className='w-4 h-4' />
+                                </Link>
                             )}
 
                             {isSignedIn ? (
@@ -53,12 +51,10 @@ export default function HeroSection() {
                                     Explore AI Chat
                                 </Link>
                             ) : (
-                                <SignInButton mode='modal'>
-                                    <button className='mono-btn inline-flex items-center gap-2 cursor-pointer' type='button'>
-                                        <Play className='w-4 h-4' />
-                                        See Product
-                                    </button>
-                                </SignInButton>
+                                <Link href='/sign-in' className='mono-btn inline-flex items-center gap-2 cursor-pointer'>
+                                    <Play className='w-4 h-4' />
+                                    See Product
+                                </Link>
                             )}
                         </div>
                     </div>

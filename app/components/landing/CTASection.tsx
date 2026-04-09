@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { SignUpButton, useUser } from '@clerk/nextjs'
+import { useUser } from '@clerk/nextjs'
 import { ArrowRight, Star } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
@@ -29,12 +29,12 @@ function CTASection() {
                             </Link>
                         </Button>
                     ) : (
-                        <SignUpButton>
-                            <Button size='lg' className='mono-btn-solid px-8 py-4 rounded-full group'>
+                        <Button asChild size='lg' className='mono-btn-solid px-8 py-4 rounded-full group'>
+                            <Link href='/sign-up' className='group'>
                                 <span>Start Free Trial</span>
                                 <ArrowRight className='w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform' />
-                            </Button>
-                        </SignUpButton>
+                            </Link>
+                        </Button>
                     )}
                     <div className='flex items-center justify-center space-x-1 mt-6'>
                         <Star className='w-5 h-5 text-primary fill-current' />

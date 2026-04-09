@@ -1,7 +1,6 @@
 import { App } from '@slack/bolt'
 import { authorizeSlack } from './utils/slack-auth'
 import { handleAppMention } from './handlers/app-mention'
-import { handleMessage } from './handlers/message'
 import { NextRequest, NextResponse } from 'next/server'
 import { verifySlackSignature } from './utils/verifySlackSignature'
 
@@ -11,7 +10,6 @@ const app = new App({
 })
 
 app.event('app_mention', handleAppMention)
-app.message(handleMessage)
 
 export async function POST(req: NextRequest) {
     try {

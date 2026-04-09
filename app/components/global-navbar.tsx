@@ -1,6 +1,6 @@
 'use client'
 
-import { SignInButton, SignUpButton, UserButton, useUser } from '@clerk/nextjs'
+import { UserButton, useUser } from '@clerk/nextjs'
 import PillNav from '@/components/reactbits/pill-nav'
 import { Menu, Sparkles, X } from 'lucide-react'
 import Link from 'next/link'
@@ -52,12 +52,8 @@ export function GlobalNavbar() {
               <UserButton afterSignOutUrl='/' />
             ) : (
               <>
-                <SignInButton mode='modal'>
-                  <button className='mono-btn cursor-pointer' type='button'>Sign In</button>
-                </SignInButton>
-                <SignUpButton mode='modal'>
-                  <button className='mono-btn-solid cursor-pointer' type='button'>Create Account</button>
-                </SignUpButton>
+                <Link href='/sign-in' className='mono-btn cursor-pointer'>Sign In</Link>
+                <Link href='/sign-up' className='mono-btn-solid cursor-pointer'>Create Account</Link>
               </>
             )}
           </div>
@@ -93,16 +89,12 @@ export function GlobalNavbar() {
                 </div>
               ) : (
                 <div className='grid grid-cols-2 gap-2'>
-                  <SignInButton mode='modal'>
-                    <button className='mono-btn w-full cursor-pointer' onClick={closeMobile} type='button'>
-                      Sign In
-                    </button>
-                  </SignInButton>
-                  <SignUpButton mode='modal'>
-                    <button className='mono-btn-solid w-full cursor-pointer' onClick={closeMobile} type='button'>
-                      Create Account
-                    </button>
-                  </SignUpButton>
+                  <Link href='/sign-in' className='mono-btn w-full text-center cursor-pointer' onClick={closeMobile}>
+                    Sign In
+                  </Link>
+                  <Link href='/sign-up' className='mono-btn-solid w-full text-center cursor-pointer' onClick={closeMobile}>
+                    Create Account
+                  </Link>
                 </div>
               )}
             </div>

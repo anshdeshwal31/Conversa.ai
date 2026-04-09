@@ -10,6 +10,7 @@ function Settings() {
     const { userId, isLoaded } = useAuth()
     const [botName, setBotName] = useState('Meeting Bot')
     const [botImageUrl, setBotImageUrl] = useState<string | null>(null)
+    const [botImageStorageUrl, setBotImageStorageUrl] = useState<string | null>(null)
     const [userPlan, setUserPlan] = useState('free')
     const [isLoading, setIsLoading] = useState(true)
     const [isSaving, setIsSaving] = useState(false)
@@ -49,6 +50,7 @@ function Settings() {
                 const data = await response.json()
                 setBotName(data.botName || 'Meeting Bot')
                 setBotImageUrl(normalizeImageUrl(data.botImageUrl))
+                setBotImageStorageUrl(normalizeImageUrl(data.botImageStorageUrl ?? data.botImageUrl))
                 setUserPlan(data.plan || 'free')
             }
         } catch (error) {
@@ -81,7 +83,11 @@ function Settings() {
             const data = await response.json()
 
             if (response.ok) {
-                setBotImageUrl(normalizeImageUrl(data.url))
+                const normalizedStorageUrl = normalizeImageUrl(data.url)
+                const normalizedPreviewUrl = normalizeImageUrl(data.previewUrl || data.url)
+
+                setBotImageStorageUrl(normalizedStorageUrl)
+                setBotImageUrl(normalizedPreviewUrl)
                 setHasChanges(true)
             } else {
                 console.error('image uploaded failed:', data.error)
@@ -103,12 +109,14 @@ function Settings() {
                 },
                 body: JSON.stringify({
                     botName,
-                    botImageUrl: normalizeImageUrl(botImageUrl)
+                    botImageUrl: normalizeImageUrl(botImageStorageUrl ?? botImageUrl),
+                    botImageStorageUrl: normalizeImageUrl(botImageStorageUrl ?? botImageUrl)
                 })
             })
 
             if (response.ok) {
                 setHasChanges(false)
+                await fetchBotSettings()
             }
         } catch (error) {
             console.error('error saving bot settings:', error)
@@ -226,7 +234,16 @@ function Settings() {
                                         src={botImageUrl}
                                         alt='Bot Avatar'
                                         className='w-20 h-20 rounded-full object-cover'
-                                        onError={() => setBotImageUrl(null)}
+                                        onError={() => {
+                                            const fallbackUrl = normalizeImageUrl(botImageStorageUrl)
+
+                                            if (fallbackUrl && fallbackUrl !== botImageUrl) {
+                                                setBotImageUrl(fallbackUrl)
+                                                return
+                                            }
+
+                                            setBotImageUrl(null)
+                                        }}
                                     />
                                 ) : (
                                     <Bot className='h-10 w-10 text-white/60' />

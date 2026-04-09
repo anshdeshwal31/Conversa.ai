@@ -3,8 +3,9 @@
 import PastMeetings from '@/app/home/components/PastMeetings'
 import UpcomingMeetings from '@/app/home/components/UpcomingMeetings'
 import { useMeetings } from '@/app/home/hooks/useMeetings'
-import { SignInButton, SignUpButton, useAuth } from '@clerk/nextjs'
+import { useAuth } from '@clerk/nextjs'
 import { ArrowRight, CalendarCheck2 } from 'lucide-react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
@@ -61,18 +62,14 @@ function MeetingsPage() {
                         </p>
 
                         <div className='mt-7 flex flex-wrap items-center justify-center gap-3'>
-                            <SignInButton mode='modal'>
-                                <button className='mono-btn-solid cursor-pointer inline-flex items-center gap-2' type='button'>
-                                    Log In and Schedule Bot
-                                    <ArrowRight className='w-4 h-4' />
-                                </button>
-                            </SignInButton>
+                            <Link href='/sign-in' className='mono-btn-solid cursor-pointer inline-flex items-center gap-2'>
+                                Log In and Schedule Bot
+                                <ArrowRight className='w-4 h-4' />
+                            </Link>
 
-                            <SignUpButton mode='modal'>
-                                <button className='mono-btn cursor-pointer' type='button'>
-                                    Create Account
-                                </button>
-                            </SignUpButton>
+                            <Link href='/sign-up' className='mono-btn cursor-pointer'>
+                                Create Account
+                            </Link>
                         </div>
                     </div>
                 </div>

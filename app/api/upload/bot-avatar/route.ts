@@ -1,4 +1,5 @@
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { auth } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -38,11 +39,27 @@ export async function POST(request: NextRequest) {
 
         await s3Client.send(uploadCommand)
 
-        const publicUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`
+        const storageUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`
+
+        let previewUrl = storageUrl
+
+        try {
+            previewUrl = await getSignedUrl(
+                s3Client,
+                new GetObjectCommand({
+                    Bucket: process.env.S3_BUCKET_NAME!,
+                    Key: fileName
+                }),
+                { expiresIn: 3600 }
+            )
+        } catch (error) {
+            console.error('failed to create bot avatar preview url:', error)
+        }
 
         return NextResponse.json({
             success: true,
-            url: publicUrl
+            url: storageUrl,
+            previewUrl
         })
 
     } catch (error) {

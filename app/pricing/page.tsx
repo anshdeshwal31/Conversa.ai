@@ -284,7 +284,7 @@ function Pricing() {
                 </div>
 
                 <div className='mt-8 max-w-3xl mx-auto text-center text-sm text-white/50 relative z-10'>
-                    Starter is free. Pro and Premium are coming soon until Razorpay checkout is fully set up.
+                    Starter is free. Pro and Premium are coming soon .
                 </div>
             </div>
         </div>

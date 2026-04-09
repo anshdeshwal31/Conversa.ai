@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.850.0",
+    "@aws-sdk/s3-request-presigner": "^3.1027.0",
     "@clerk/nextjs": "^6.23.3",
     "@langchain/core": "^0.3.55",
     "@langchain/google-genai": "^0.2.14",
