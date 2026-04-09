@@ -4,6 +4,8 @@
   "rsc": true,
   "tsx": true,
   "tailwind": {
+
+    
     "config": "",
     "css": "app/globals.css",
     "baseColor": "neutral",
@@ -17,6 +19,5 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  
   "iconLibrary": "lucide"
 }
