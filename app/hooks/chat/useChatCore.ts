@@ -3,10 +3,10 @@ import { useAuth } from "@clerk/nextjs"
 import { useState } from "react"
 
 export interface ChatMessage {
-    id: number
-    content: string
+    id:number
+    content:string
     isBot: boolean
-    timestamp: Date
+    timestamp:Date
 }
 
 interface UseChatCoreOptions {
@@ -15,6 +15,8 @@ interface UseChatCoreOptions {
 }
 
 function formatAssistantMessage(content: string) {
+
+    
     return content
         .replace(/\*\*(.*?)\*\*/g, '$1')
         .replace(/^#{1,6}\s+/gm, '')

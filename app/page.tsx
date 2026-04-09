@@ -1,3 +1,5 @@
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import HeroSection from "./components/landing/HeroSection";
 import FeaturesSection from "./components/landing/FeaturesSection";
 import IntegrationsSection from "./components/landing/IntegrationsSection";
@@ -7,7 +9,13 @@ import MoreFeaturesSection from "./components/landing/MoreFeaturesSection";
 import CTASection from "./components/landing/CTASection";
 import Footer from "./components/landing/Footer";
 
-export default function Home() {
+export default async function Home() {
+  const { userId } = await auth();
+
+  if (userId) {
+    redirect("/home");
+  }
+
   return (
     <div className="min-h-screen space-y-1 pb-2">
       <HeroSection />
