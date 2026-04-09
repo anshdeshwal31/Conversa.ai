@@ -1,4 +1,4 @@
-import { Bot, DollarSign, Home, Layers3, Settings } from "lucide-react";
+import { Bot, CalendarCheck2, DollarSign, Home, Layers3, Settings } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useUsage } from "../contexts/UsageContext";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
@@ -10,6 +10,11 @@ const items = [
         title: "Home",
         url: "/home",
         icon: Home,
+    },
+    {
+        title: "Meetings",
+        url: "/meeting",
+        icon: CalendarCheck2,
     },
     {
         title: "Integrations",

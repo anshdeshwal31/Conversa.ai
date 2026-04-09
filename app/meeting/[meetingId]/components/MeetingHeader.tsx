@@ -110,7 +110,7 @@ function MeetingHeader({
                 toast.success('Meeting deleted', {
                     description: result.message || 'The meeting was deleted successfully.'
                 })
-                router.push('/home')
+                router.push('/meeting')
             } else {
                 toast.error('Failed to delete meeting', {
                     description: result.error || 'Please try again in a moment.'
