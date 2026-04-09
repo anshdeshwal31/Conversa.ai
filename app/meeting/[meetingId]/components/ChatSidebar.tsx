@@ -26,7 +26,8 @@ function ChatSidebar({
     onSendMessage,
     onSuggestionClick
 }: ChatSidebarProps) {
-    const { canChat } = useUsage()
+    const { canChat, loading } = useUsage()
+    const chatLocked = !loading && !canChat
     const chatSuggestions = [
         "What deadlines were discussed in this meeting?",
         "Write a follow-up email for the team",
@@ -79,8 +80,8 @@ function ChatSidebar({
                             <button
                                 key={index}
                                 onClick={() => onSuggestionClick(suggestion)}
-                                disabled={!canChat}
-                                className={`w-4/5 rounded-xl p-4 border transition-all text-center cursor-pointer ${canChat
+                                disabled={chatLocked}
+                                className={`w-4/5 rounded-xl p-4 border transition-all text-center cursor-pointer ${!chatLocked
                                     ? 'bg-white/[0.04] text-gray-300 border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.2]'
                                     : 'bg-white/[0.02] text-gray-600 border-white/[0.04] cursor-not-allowed'
                                     }`}
@@ -91,7 +92,7 @@ function ChatSidebar({
                     </div>
                 )}
 
-                {!canChat && (
+                {chatLocked && (
                     <div className='text-center p-4'>
                         <p className='text-xs text-gray-500 mb-2'>Daily chat limit reached</p>
                         <a href="/pricing" className='text-xs text-white/80 hover:underline'>
@@ -113,15 +114,15 @@ function ChatSidebar({
                                 onSendMessage()
                             }
                         }}
-                        placeholder={canChat ? "Ask about this meeting..." : "Daily limit reached — Starter is free; Pro/Premium are coming soon"}
+                        placeholder={!chatLocked ? "Ask about this meeting..." : "Daily limit reached — Starter is free; Pro/Premium are coming soon"}
                         className='flex-1 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2 text-sm text-white placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/25 transition-all'
-                        disabled={!canChat}
+                        disabled={chatLocked}
                     />
 
                     <button
                         type='button'
                         onClick={onSendMessage}
-                        disabled={!chatInput.trim() || !canChat}
+                        disabled={!chatInput.trim() || chatLocked}
                         className='bg-white text-black p-2.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer hover:opacity-90'
                     >
                         <Send className='h-4 w-4' />

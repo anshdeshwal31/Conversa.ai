@@ -17,6 +17,8 @@ function ChatMessages({
     messages,
     isLoading
 }: ChatMessagesProps) {
+    const showTypingIndicator = isLoading && (messages.length === 0 || !messages[messages.length - 1].isBot)
+
     return (
         <div className='space-y-5'>
             {messages.map((message) => (
@@ -36,13 +38,13 @@ function ChatMessages({
                                 ? 'glass-card'
                                 : 'bg-[#2b1124]/70 border border-accent/35'
                         }`}>
-                            <p className='text-sm leading-relaxed text-white/86'>{message.content}</p>
+                            <p className='text-sm leading-relaxed text-white/86 whitespace-pre-wrap break-words'>{message.content}</p>
                         </div>
                     </div>
                 </div>
             ))}
 
-            {isLoading && (
+            {showTypingIndicator && (
                 <div className='flex justify-start'>
                     <div className='flex gap-3'>
                         <div className='w-8 h-8 rounded-xl bg-primary/18 border border-primary/30 flex items-center justify-center flex-shrink-0 mt-1'>

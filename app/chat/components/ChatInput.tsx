@@ -1,4 +1,5 @@
 import { useUsage } from '@/app/contexts/UsageContext'
+import { useAuth } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button'
 import { Send } from 'lucide-react'
 import React from 'react'
@@ -18,12 +19,18 @@ function ChatInput({
 }: ChatInputProps) {
 
     const { canChat, usage, limits, loading } = useUsage()
+    const { userId } = useAuth()
+
+    const isLoggedOut = !userId
+    const disableForPlanLimit = !isLoggedOut && !loading && !canChat
+    const inputDisabled = isLoading || disableForPlanLimit
+
     const dailyLimitReached = Boolean(
         usage &&
         limits.chatMessages !== -1 &&
         usage.chatMessagesToday >= limits.chatMessages
     )
-    const showLimitNotice = !loading && dailyLimitReached
+    const showLimitNotice = !loading && !isLoggedOut && dailyLimitReached
 
     return (
         <div className='p-6 border-t border-white/10 bg-[#07101c]/78'>
@@ -44,19 +51,21 @@ function ChatInput({
                         value={chatInput}
                         onChange={e => onInputChange(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && onSendMessage()}
-                        placeholder={loading
-                            ? 'Loading your chat access...'
-                            : canChat
+                        placeholder={isLoggedOut
+                                ? 'Ask anything about meetings. We\'ll guide you to sign in to unlock full AI context.'
+                                : !loading && !canChat
+                                ? 'Daily chat limit reached for your current plan. Check Pricing for details.'
+                                : canChat
                                 ? 'Ask about any meeting — deadlines, decisions, action items, participants...'
-                                : 'Chat is currently unavailable. Please refresh and try again.'}
-                        className='w-full bg-[#0b1627]/90 backdrop-blur-sm border border-white/[0.14] rounded-2xl px-5 py-3.5 text-sm text-white placeholder:text-white/32 focus:outline-none focus:border-primary/55 focus:shadow-[0_0_28px_rgba(44,225,196,0.16)] transition-all duration-300'
-                        disabled={isLoading || loading || !canChat}
+                                : 'Checking plan limits...'}
+                        className='w-full bg-[linear-gradient(120deg,rgba(5,8,13,0.95),rgba(9,13,21,0.93)_48%,rgba(14,10,18,0.94))] border border-white/[0.14] rounded-2xl px-5 py-3.5 text-sm text-white placeholder:text-white/32 focus:outline-none focus:border-primary/55 focus:shadow-[0_0_28px_rgba(44,225,196,0.16)] transition-all duration-300'
+                        disabled={inputDisabled}
                     />
                 </div>
 
                 <Button
                     onClick={onSendMessage}
-                    disabled={isLoading || loading || !canChat}
+                    disabled={inputDisabled}
                     className='mono-btn-solid rounded-2xl px-5 py-3.5 h-auto cursor-pointer'
                 >
                     <Send className='h-4 w-4' />

@@ -1,4 +1,4 @@
-import { HumanMessage, SystemMessage } from '@langchain/core/messages'
+import { AIMessage, HumanMessage, SystemMessage } from '@langchain/core/messages'
 import { ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings } from '@langchain/google-genai'
 
 function getGeminiApiKey() {
@@ -136,6 +136,24 @@ function createChatModel(temperature: number, maxOutputTokens: number) {
     })
 }
 
+function getChatMaxOutputTokens() {
+    const configured = process.env.GEMINI_CHAT_MAX_OUTPUT_TOKENS
+    const parsed = configured ? Number(configured) : NaN
+
+    if (Number.isFinite(parsed) && parsed >= 300) {
+        return Math.floor(parsed)
+    }
+
+    return 1200
+}
+
+function responseHitTokenLimit(response: unknown) {
+    const metadata = (response as { response_metadata?: { finishReason?: string; finish_reason?: string } })?.response_metadata
+    const reason = String(metadata?.finishReason || metadata?.finish_reason || '').toUpperCase()
+
+    return reason.includes('MAX_TOKENS') || reason.includes('LENGTH')
+}
+
 function getMessageText(content: unknown) {
     if (typeof content === 'string') {
         return content
@@ -218,12 +236,29 @@ export async function createManyEmbeddings(texts: string[]) {
 }
 
 export async function chatWithAI(systemPrompt: string, userQuestion: string) {
-    const model = createChatModel(0.7, 500)
+    const model = createChatModel(0.7, getChatMaxOutputTokens())
 
     const response = await model.invoke([
         new SystemMessage(systemPrompt),
         new HumanMessage(userQuestion)
     ])
 
-    return getMessageText(response.content) || 'sorry, I could not generate a response.'
+    let answer = getMessageText(response.content) || 'sorry, I could not generate a response.'
+
+    if (responseHitTokenLimit(response) && answer.trim()) {
+        const continuationResponse = await model.invoke([
+            new SystemMessage(systemPrompt),
+            new HumanMessage(userQuestion),
+            new AIMessage(answer),
+            new HumanMessage('Continue from where you left off without repeating previous lines. Keep the same format.')
+        ])
+
+        const continuation = getMessageText(continuationResponse.content).trim()
+
+        if (continuation) {
+            answer = `${answer.trimEnd()}\n${continuation}`
+        }
+    }
+
+    return answer
 }

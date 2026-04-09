@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -10,23 +10,16 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: 'not authed' }, { status: 401 })
         }
 
-        const clerkUser = await currentUser()
-        const email = clerkUser?.primaryEmailAddress?.emailAddress ?? null
-        const name = clerkUser?.fullName ?? null
-
         const user = await prisma.user.upsert({
             where: {
                 clerkId: userId
             },
-            update: {
-                ...(email ? { email } : {}),
-                ...(name ? { name } : {})
-            },
+            update: {},
             create: {
                 id: userId,
                 clerkId: userId,
-                email,
-                name
+                email: null,
+                name: null
             },
             select: {
                 currentPlan: true,

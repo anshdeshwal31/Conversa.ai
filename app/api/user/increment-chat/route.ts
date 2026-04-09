@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db";
 import { canUserChat, incrementChatUsage } from "@/lib/usage";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -10,29 +10,19 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Not authed' }, { status: 401 })
         }
 
-        const clerkUser = await currentUser()
-        const email = clerkUser?.primaryEmailAddress?.emailAddress ?? null
-        const name = clerkUser?.fullName ?? null
-
         const user = await prisma.user.upsert({
             where: {
                 clerkId: userId
             },
-            update: {
-                ...(email ? { email } : {}),
-                ...(name ? { name } : {})
-            },
+            update: {},
             create: {
                 id: userId,
                 clerkId: userId,
-                email,
-                name
+                email: null,
+                name: null
             },
             select: {
-                id: true,
-                currentPlan: true,
-                subscriptionStatus: true,
-                chatMessagesToday: true
+                id: true
             }
         })
 
