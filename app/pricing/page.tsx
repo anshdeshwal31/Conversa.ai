@@ -1,12 +1,43 @@
 'use client'
 
 import { useUser } from '@clerk/nextjs'
-import { Check, Loader2, Sparkles } from 'lucide-react'
+import { Check, Sparkles } from 'lucide-react'
 import React, { useState } from 'react'
+import RippleLoader from '@/components/ui/ripple-loader'
+
+type RazorpayPaymentResponse = {
+    razorpay_order_id: string
+    razorpay_payment_id: string
+    razorpay_signature: string
+}
+
+type RazorpayCheckoutOptions = {
+    key: string
+    amount: number
+    currency: string
+    name: string
+    description: string
+    order_id: string
+    prefill: {
+        name: string
+        email: string
+    }
+    handler: (paymentResponse: RazorpayPaymentResponse) => void | Promise<void>
+    modal: {
+        ondismiss: () => void
+    }
+}
+
+type RazorpayInstance = {
+    open: () => void
+    on: (event: 'payment.failed', callback: () => void) => void
+}
+
+type RazorpayConstructor = new (options: RazorpayCheckoutOptions) => RazorpayInstance
 
 declare global {
     interface Window {
-        Razorpay: any
+        Razorpay: RazorpayConstructor
     }
 }
 
@@ -132,11 +163,7 @@ function Pricing() {
                         name: user.fullName || '',
                         email: user.primaryEmailAddress?.emailAddress || ''
                     },
-                    handler: async (paymentResponse: {
-                        razorpay_order_id: string
-                        razorpay_payment_id: string
-                        razorpay_signature: string
-                    }) => {
+                    handler: async (paymentResponse: RazorpayPaymentResponse) => {
                         try {
                             const verifyResponse = await fetch('/api/stripe/verify-payment', {
                                 method: 'POST',
@@ -178,9 +205,9 @@ function Pricing() {
 
     return (
         <div className='min-h-screen py-8 md:py-12'>
-            <div className='surface-frame max-w-[1320px] mx-auto p-6 md:p-10 ambient-panel relative overflow-hidden'>
-                <div className='hero-glow hero-glow-rose top-[-20%] right-[-8%] w-[420px] h-[320px]' />
-                <div className='hero-glow hero-glow-rose bottom-[-26%] left-[-12%] w-[420px] h-[300px]' />
+            <div className='surface-frame max-w-[1320px] mx-auto p-5 sm:p-6 md:p-10 ambient-panel relative overflow-hidden'>
+                <div className='hero-glow hero-glow-rose top-[-12%] right-[-8%] w-[240px] h-[180px] sm:w-[320px] sm:h-[240px] md:w-[420px] md:h-[320px]' />
+                <div className='hero-glow hero-glow-rose bottom-[-16%] left-[-12%] w-[240px] h-[180px] sm:w-[320px] sm:h-[240px] md:w-[420px] md:h-[300px]' />
 
                 <div className='max-w-3xl text-center mx-auto mb-10 md:mb-14 relative z-10'>
                     <div className='section-kicker'>
@@ -266,7 +293,7 @@ function Pricing() {
                                     >
                                         {isLoading ? (
                                             <span className='flex items-center justify-center gap-2'>
-                                                <Loader2 className='w-4 h-4 animate-spin' />
+                                                <RippleLoader size={16} />
                                                 Processing...
                                             </span>
                                         ) : isComingSoon ? (

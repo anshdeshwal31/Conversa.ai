@@ -8,10 +8,10 @@ export default function HeroSection() {
     const { isSignedIn } = useUser()
     return (
         <section className='px-1 pt-2 pb-12 md:px-2'>
-            <div className='surface-frame ambient-panel max-w-[1320px] mx-auto min-h-[78vh] p-6 md:p-12 lg:p-16 overflow-hidden relative'>
-                <div className='hero-glow hero-glow-teal top-[-16%] right-[2%] w-[540px] h-[380px]' />
-                <div className='hero-glow hero-glow-rose bottom-[-18%] left-[-8%] w-[460px] h-[320px]' />
-                <div className='hero-glow hero-glow-teal top-[45%] left-[36%] w-[300px] h-[220px] opacity-45' />
+            <div className='surface-frame ambient-panel max-w-[1320px] mx-auto min-h-[70vh] md:min-h-[78vh] p-5 sm:p-6 md:p-12 lg:p-16 overflow-hidden relative'>
+                <div className='hero-glow hero-glow-teal top-[-8%] right-[-6%] w-[250px] h-[170px] sm:w-[360px] sm:h-[250px] md:w-[460px] md:h-[320px] lg:w-[540px] lg:h-[380px]' />
+                <div className='hero-glow hero-glow-rose bottom-[-12%] left-[-10%] w-[240px] h-[170px] sm:w-[320px] sm:h-[220px] md:w-[400px] md:h-[280px] lg:w-[460px] lg:h-[320px]' />
+                <div className='hero-glow hero-glow-teal hidden md:block top-[45%] left-[36%] w-[300px] h-[220px] opacity-45' />
 
                 <div className='relative z-10 h-full grid gap-8 lg:grid-cols-[1.2fr_0.8fr] items-center'>
                     <div className='text-left reveal-up'>
@@ -29,7 +29,7 @@ export default function HeroSection() {
                         </h1>
 
                         <p className='mt-6 max-w-2xl text-white/68 text-base md:text-lg leading-relaxed'>
-                            Convorbit AI Studio captures context, extracts decisions, and routes action automatically.
+                            Convorbit AI captures context, extracts decisions, and routes action automatically.
                             From live calls to follow-up execution, your team moves in one continuous system.
                         </p>
 

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import RippleLoader from '@/components/ui/ripple-loader'
 
 export default function TrelloCallback() {
     const router = useRouter()
@@ -50,7 +51,7 @@ export default function TrelloCallback() {
     return (
         <div className="min-h-screen bg-background flex items-center justify-center">
             <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                <RippleLoader size={48} className='mx-auto mb-4' />
                 <h2 className="text-xl font-semibold text-foreground mb-2">
                     Connecting trello
                 </h2>

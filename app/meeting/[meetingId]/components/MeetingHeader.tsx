@@ -2,6 +2,7 @@ import { Check, Eye, Share2, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
+import RippleLoader from '@/components/ui/ripple-loader'
 
 interface MeetingHeaderProps {
     title: string
@@ -128,22 +129,22 @@ function MeetingHeader({
         }
     }
     return (
-        <div className='bg-[#0F0F15] border-b border-white/[0.08] px-6 py-3.5 flex justify-between items-center'>
-            <h1 className='text-xl font-semibold text-white'>
+        <div className='bg-[#0F0F15] border-b border-white/[0.08] px-4 md:px-6 py-3.5 flex flex-col gap-3 md:flex-row md:justify-between md:items-center'>
+            <h1 className='text-lg md:text-xl font-semibold text-white break-words'>
                 {title}
             </h1>
 
             {isLoading ? (
                 <div className='flex items-center gap-2 text-sm text-gray-500'>
-                    <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-gray-500'></div>
+                    <RippleLoader size={16} className='opacity-80' />
                     Loading...
                 </div>
             ) : isOwner ? (
-                <div className='flex gap-3'>
+                <div className='flex flex-wrap gap-2 md:gap-3 justify-start md:justify-end w-full md:w-auto'>
                     <button
                         onClick={handlePostToSlack}
                         disabled={isPosting || !meetingId}
-                        className='inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.06] border border-white/[0.08] text-gray-300 text-sm hover:bg-white/[0.1] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+                        className='inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-xl bg-white/[0.06] border border-white/[0.08] text-gray-300 text-xs md:text-sm hover:bg-white/[0.1] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
                     >
                         <img
                             src="/slack.png"
@@ -155,7 +156,7 @@ function MeetingHeader({
 
                     <button
                         onClick={handleShare}
-                        className='inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.06] border border-white/[0.08] text-gray-300 text-sm hover:bg-white/[0.1] transition-colors cursor-pointer'
+                        className='inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-xl bg-white/[0.06] border border-white/[0.08] text-gray-300 text-xs md:text-sm hover:bg-white/[0.1] transition-colors cursor-pointer'
                     >
                         {copied ? (
                             <>
@@ -173,7 +174,7 @@ function MeetingHeader({
                     <button
                         onClick={handleDelete}
                         disabled={isDeleting}
-                        className='inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm hover:bg-red-500/20 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+                        className='inline-flex items-center gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs md:text-sm hover:bg-red-500/20 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
                     >
                         <Trash2 className='h-4 w-4' />
                         {isDeleting ? 'Deleting...' : 'Delete'}

@@ -53,7 +53,7 @@ function ChatSidebar({
                         className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}
                     >
                         <div
-                            className={`max-w-[80%] rounded-2xl p-3 ${message.isBot
+                            className={`max-w-[92%] sm:max-w-[86%] rounded-2xl p-3 ${message.isBot
                                 ? 'bg-white/[0.04] border border-white/[0.08] text-gray-300'
                                 : 'bg-white/[0.08] border border-white/[0.14] text-white'
                                 }`}
@@ -81,7 +81,7 @@ function ChatSidebar({
                                 key={index}
                                 onClick={() => onSuggestionClick(suggestion)}
                                 disabled={chatLocked}
-                                className={`w-4/5 rounded-xl p-4 border transition-all text-center cursor-pointer ${!chatLocked
+                                className={`w-full sm:w-4/5 rounded-xl p-4 border transition-all text-center cursor-pointer ${!chatLocked
                                     ? 'bg-white/[0.04] text-gray-300 border-white/[0.08] hover:bg-white/[0.08] hover:border-white/[0.2]'
                                     : 'bg-white/[0.02] text-gray-600 border-white/[0.04] cursor-not-allowed'
                                     }`}

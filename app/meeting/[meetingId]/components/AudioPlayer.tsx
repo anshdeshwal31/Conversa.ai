@@ -95,11 +95,8 @@ function CustomAudioPlayer({
 
     return (
         <div
-            className={`fixed bottom-0 bg-[#0F0F15] border-t border-white/[0.08] p-5 ${!isOwner
-                ? 'left-0 right-0'
-                : ''
-                }`}
-            style={isOwner ? { left: 'var(--sidebar-width, 16rem)', right: '24rem' } : {}}
+            className={`fixed bottom-0 left-0 right-0 z-40 bg-[#0F0F15] border-t border-white/[0.08] p-3 sm:p-5 ${isOwner ? 'md:left-[var(--player-left)] md:right-96' : ''}`}
+            style={isOwner ? ({ ['--player-left' as string]: 'var(--sidebar-width, 16rem)' } as React.CSSProperties) : {}}
         >
             <div style={{ display: 'none' }}>
                 <AudioPlayer
@@ -132,7 +129,7 @@ function CustomAudioPlayer({
             </div>
 
             <div className={!isOwner ? 'max-w-4xl mx-auto' : ''}>
-                <div className='flex items-center gap-4'>
+                <div className='flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4'>
                     <div className='flex items-center gap-3'>
                         <button
                             onClick={handleSkipBack}
@@ -156,8 +153,8 @@ function CustomAudioPlayer({
                         </button>
                     </div>
 
-                    <div className='flex-1 flex items-center gap-3'>
-                        <span className='text-sm text-gray-500 min-w-[40px]'>
+                    <div className='flex-1 flex items-center gap-2 sm:gap-3'>
+                        <span className='text-xs sm:text-sm text-gray-500 min-w-[40px]'>
                             {formatTime(currentTime)}
                         </span>
 
@@ -171,12 +168,12 @@ function CustomAudioPlayer({
                             />
                         </div>
 
-                        <span className='text-sm text-gray-500 min-w-[40px]'>
+                        <span className='text-xs sm:text-sm text-gray-500 min-w-[40px]'>
                             {formatTime(duration)}
                         </span>
                     </div>
 
-                    <div className='flex items-center gap-2'>
+                    <div className='hidden sm:flex items-center gap-2'>
                         <Volume2 className='h-4 w-4 text-gray-500' />
                         <div
                             className='w-20 bg-white/[0.06] rounded-full h-1.5 cursor-pointer'
@@ -189,7 +186,7 @@ function CustomAudioPlayer({
                         </div>
                     </div>
 
-                    <div className='text-sm text-gray-500'>
+                    <div className='hidden md:block text-sm text-gray-500'>
                         Meeting Recording
                     </div>
 

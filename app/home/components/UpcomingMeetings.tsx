@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { Calendar, Clock, RefreshCw } from 'lucide-react'
 import { format } from 'date-fns'
+import RippleLoader from '@/components/ui/ripple-loader'
 
 interface UpcomingMeetingsProps {
     upcomingEvents: CalendarEvent[]
@@ -87,7 +88,11 @@ function UpcomingMeetings({
                         onClick={onRefresh}
                         disabled={loading}
                     >
-                        <RefreshCw className={`w-3.5 h-3.5 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                        {loading ? (
+                            <RippleLoader size={14} className='mr-2' />
+                        ) : (
+                            <RefreshCw className='w-3.5 h-3.5 mr-2' />
+                        )}
                         {loading ? 'Loading...' : 'Refresh'}
                     </Button>
                     {upcomingEvents.map((event) => (

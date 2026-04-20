@@ -10,9 +10,9 @@ function CTASection() {
     const { isSignedIn } = useUser()
     return (
         <section className='px-1 py-4 md:px-2'>
-            <div className='surface-frame max-w-[1320px] mx-auto p-7 md:p-12 text-center ambient-panel relative overflow-hidden'>
-                <div className='hero-glow hero-glow-rose top-[-30%] right-[-8%] w-[320px] h-[280px]' />
-                <div className='hero-glow hero-glow-rose bottom-[-34%] left-[-10%] w-[360px] h-[300px]' />
+            <div className='surface-frame max-w-[1320px] mx-auto p-5 sm:p-7 md:p-12 text-center ambient-panel relative overflow-hidden'>
+                <div className='hero-glow hero-glow-rose top-[-14%] right-[-8%] w-[220px] h-[180px] sm:w-[280px] sm:h-[240px] md:w-[320px] md:h-[280px]' />
+                <div className='hero-glow hero-glow-rose bottom-[-18%] left-[-10%] w-[230px] h-[190px] sm:w-[300px] sm:h-[250px] md:w-[360px] md:h-[300px]' />
                 <div className='relative z-10'>
                     <span className='section-kicker'>Launch</span>
                     <h2 className='text-3xl md:text-5xl font-semibold text-white mt-5 mb-4'>

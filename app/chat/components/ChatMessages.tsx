@@ -23,7 +23,7 @@ function ChatMessages({
         <div className='space-y-5'>
             {messages.map((message) => (
                 <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
-                    <div className={`flex gap-3 max-w-[75%] ${message.isBot ? 'flex-row' : 'flex-row-reverse'}`}>
+                    <div className={`flex gap-3 max-w-[92%] sm:max-w-[85%] md:max-w-[75%] ${message.isBot ? 'flex-row' : 'flex-row-reverse'}`}>
                         {/* Avatar */}
                         <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 mt-1 ${
                             message.isBot

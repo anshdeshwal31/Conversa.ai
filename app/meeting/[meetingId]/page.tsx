@@ -8,10 +8,12 @@ import ActionItems from './components/action-items/ActionItems'
 import TranscriptDisplay from './components/TranscriptDisplay'
 import ChatSidebar from './components/ChatSidebar'
 import CustomAudioPlayer from './components/AudioPlayer'
+import RippleLoader from '@/components/ui/ripple-loader'
 
 function MeetingDetail() {
     const [chatPanelWidth, setChatPanelWidth] = useState(420)
     const [isResizing, setIsResizing] = useState(false)
+    const [canUseSplitChat, setCanUseSplitChat] = useState(false)
     const splitContainerRef = useRef<HTMLDivElement | null>(null)
 
     const {
@@ -34,7 +36,18 @@ function MeetingDetail() {
         meetingInfoData
     } = useMeetingDetail()
 
-    const showResizableChat = userChecked && isOwner
+    const showResizableChat = userChecked && isOwner && canUseSplitChat
+
+    useEffect(() => {
+        const handleViewport = () => {
+            setCanUseSplitChat(window.innerWidth >= 1100)
+        }
+
+        handleViewport()
+        window.addEventListener('resize', handleViewport)
+
+        return () => window.removeEventListener('resize', handleViewport)
+    }, [])
 
     useEffect(() => {
         if (!isResizing) {
@@ -48,8 +61,8 @@ function MeetingDetail() {
             }
 
             const rect = container.getBoundingClientRect()
-            const minWidth = 340
-            const maxWidth = Math.max(minWidth, Math.min(760, rect.width - 360))
+            const minWidth = rect.width < 1400 ? 300 : 340
+            const maxWidth = Math.max(minWidth, Math.min(760, rect.width - 340))
             const nextWidth = rect.right - event.clientX
             const clampedWidth = Math.min(maxWidth, Math.max(minWidth, nextWidth))
             setChatPanelWidth(clampedWidth)
@@ -79,8 +92,8 @@ function MeetingDetail() {
                 isOwner={isOwner}
                 isLoading={!userChecked}
             />
-            <div ref={splitContainerRef} className='surface-frame flex h-[calc(100vh-73px)] overflow-hidden'>
-                <div className={`flex-1 p-6 overflow-auto pb-24 ambient-panel ${!userChecked
+            <div ref={splitContainerRef} className={`surface-frame flex ${showResizableChat ? 'h-[calc(100vh-73px)] overflow-hidden' : 'min-h-[calc(100vh-73px)] flex-col'} xl:flex-row`}>
+                <div className={`flex-1 p-4 md:p-6 ${showResizableChat ? 'overflow-auto' : 'overflow-visible'} pb-24 ambient-panel ${!userChecked
                     ? ''
                     : !isOwner
                         ? 'max-w-4xl mx-auto'
@@ -119,7 +132,7 @@ function MeetingDetail() {
                                 <div>
                                     {loading ? (
                                         <div className='glass-card p-6 text-center'>
-                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4'></div>
+                                            <RippleLoader size={30} className='mx-auto mb-4' />
                                             <p className='text-gray-400'>Loading meeting data..</p>
                                         </div>
                                     ) : meetingData?.processed ? (
@@ -174,7 +187,7 @@ function MeetingDetail() {
                                         </div>
                                     ) : (
                                         <div className='glass-card p-6 text-center'>
-                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4'></div>
+                                            <RippleLoader size={30} className='mx-auto mb-4' />
                                             <p className='text-gray-400'>Processing meeting with AI..</p>
                                             <p className='text-sm text-gray-500 mt-2'>You&apos;ll receive an email when ready</p>
 
@@ -187,7 +200,7 @@ function MeetingDetail() {
                                 <div>
                                     {loading ? (
                                         <div className='glass-card p-6 text-center'>
-                                            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-4'></div>
+                                            <RippleLoader size={30} className='mx-auto mb-4' />
                                             <p className='text-gray-400'>Loading meeting data..</p>
                                         </div>
                                     ) : meetingData?.transcript ? (
@@ -204,10 +217,23 @@ function MeetingDetail() {
 
                     </div>
 
+                    {userChecked && isOwner && !canUseSplitChat && (
+                        <div className='mt-6 h-[420px] rounded-2xl border border-white/[0.08] overflow-hidden'>
+                            <ChatSidebar
+                                messages={messages}
+                                chatInput={chatInput}
+                                showSuggestions={showSuggestions}
+                                onInputChange={handleInputChange}
+                                onSendMessage={handleSendMessage}
+                                onSuggestionClick={handleSuggestionClick}
+                            />
+                        </div>
+                    )}
+
                 </div>
 
                 {!userChecked ? (
-                    <div className='w-90 border-l border-white/[0.08] p-4 bg-[#0F0F15]'>
+                    <div className='w-full xl:w-[360px] border-l border-white/[0.08] p-4 bg-[#0F0F15]'>
                         <div className='animate-pulse'>
                             <div className='h-4 bg-white/[0.06] rounded w-1/2 mb-4'></div>
                             <div className='space-y-3'>

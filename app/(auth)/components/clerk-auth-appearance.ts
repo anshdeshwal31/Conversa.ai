@@ -1,7 +1,7 @@
 export const authClerkAppearance = {
     elements: {
-        rootBox: 'w-full',
-        card: 'w-full border-0 bg-transparent shadow-none p-0',
+        rootBox: 'w-full max-w-full overflow-hidden',
+        card: 'w-full max-w-full border-0 bg-transparent shadow-none p-0',
         headerTitle: 'text-white text-2xl font-semibold tracking-tight',
         headerSubtitle: 'text-white/60 text-sm',
         socialButtonsBlockButton:

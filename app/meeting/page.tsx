@@ -8,6 +8,7 @@ import { ArrowRight, CalendarCheck2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React from 'react'
+import RippleLoader from '@/components/ui/ripple-loader'
 
 function MeetingsPage() {
     const { userId, isLoaded } = useAuth()
@@ -37,7 +38,7 @@ function MeetingsPage() {
         return (
             <div className='flex items-center justify-center h-screen bg-[#07070B]'>
                 <div className='flex flex-col items-center gap-3'>
-                    <div className='w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
+                    <RippleLoader size={34} />
                     <span className='text-white/50 text-sm'>Loading...</span>
                 </div>
             </div>
@@ -98,7 +99,7 @@ function MeetingsPage() {
                         />
                     </div>
 
-                    <div className='lg:w-[360px] xl:w-[390px]'>
+                    <div className='w-full md:w-[320px] lg:w-[360px] xl:w-[390px]'>
                         <div className='sticky top-4'>
                             <UpcomingMeetings
                                 upcomingEvents={upcomingEvents}

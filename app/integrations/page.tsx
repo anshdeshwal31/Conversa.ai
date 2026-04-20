@@ -4,6 +4,7 @@ import React from 'react'
 import { useIntegrations } from './hooks/useIntegrations'
 import SetupForm from './components/SetupForm'
 import IntegrationCard from './components/IntegrationCard'
+import RippleLoader from '@/components/ui/ripple-loader'
 
 function Integrations() {
 
@@ -25,7 +26,7 @@ function Integrations() {
         return (
             <div className='min-h-screen flex items-center justify-center p-6'>
                 <div className='flex flex-col items-center justify-center'>
-                    <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-white mb-4'></div>
+                    <RippleLoader size={28} className='mb-4' />
                     <div className='text-gray-400'>Loading Integrations...</div>
                 </div>
             </div>

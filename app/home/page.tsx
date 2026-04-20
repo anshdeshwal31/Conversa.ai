@@ -15,6 +15,7 @@ import {
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
+import RippleLoader from '@/components/ui/ripple-loader'
 import { useUsage } from '../contexts/UsageContext'
 import { useMeetings } from './hooks/useMeetings'
 
@@ -46,7 +47,7 @@ function Home() {
         return (
             <div className='flex items-center justify-center h-screen bg-[#07070B]'>
                 <div className='flex flex-col items-center gap-3'>
-                    <div className='w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin'></div>
+                    <RippleLoader size={34} />
                     <span className='text-white/50 text-sm'>Loading...</span>
                 </div>
             </div>

@@ -12,9 +12,9 @@ const starterHighlights = [
 export default function Page() {
     return (
         <div className='min-h-[calc(100vh-120px)] px-3 pb-8 md:px-5'>
-            <div className='surface-frame ambient-panel max-w-[1320px] mx-auto p-6 md:p-8 lg:p-10 relative overflow-hidden'>
-                <div className='hero-glow hero-glow-teal top-[-24%] right-[-8%] w-[420px] h-[320px]' />
-                <div className='hero-glow hero-glow-rose bottom-[-34%] left-[-10%] w-[340px] h-[280px]' />
+            <div className='surface-frame ambient-panel max-w-[1320px] mx-auto p-5 sm:p-6 md:p-8 lg:p-10 relative overflow-hidden'>
+                <div className='hero-glow hero-glow-teal top-[-14%] right-[-8%] w-[220px] h-[170px] sm:w-[300px] sm:h-[240px] md:w-[420px] md:h-[320px]' />
+                <div className='hero-glow hero-glow-rose bottom-[-20%] left-[-10%] w-[210px] h-[170px] sm:w-[280px] sm:h-[220px] md:w-[340px] md:h-[280px]' />
 
                 <div className='relative z-10 grid gap-6 lg:grid-cols-[1.05fr_0.95fr] items-stretch'>
                     <div className='glass-card p-6 md:p-8 lg:p-10 reveal-up'>
@@ -54,7 +54,7 @@ export default function Page() {
                     </div>
 
                     <div className='surface-frame p-5 md:p-7 lg:p-8 reveal-up [animation-delay:120ms] flex flex-col justify-center'>
-                        <div className='w-full max-w-[560px] mx-auto'>
+                        <div className='w-full overflow-hidden'>
                             <div className='mb-4 flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-white/58'>
                                 <Sparkles className='w-3.5 h-3.5 text-primary' />
                                 Create account
