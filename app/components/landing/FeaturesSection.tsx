@@ -1,38 +1,7 @@
-import { Bot, Calendar, Mail, MessageSquare, Share2, Slack } from 'lucide-react'
-import React from 'react'
+'use client'
 
-const features = [
-    {
-        icon: Bot,
-        title: "AI Meeting Summaries",
-        description: "Automatic meeting summaries and action items after each meeting",
-    },
-    {
-        icon: Calendar,
-        title: "Smart Calendar Integration",
-        description: "Connect Google Calendar and bots automatically join meetings",
-    },
-    {
-        icon: Mail,
-        title: "Automated Email Reports",
-        description: "Receive beautiful email summaries with action items",
-    },
-    {
-        icon: MessageSquare,
-        title: "Chat with Meetings",
-        description: "Ask questions about meetings using our RAG pipeline",
-    },
-    {
-        icon: Share2,
-        title: "One-Click Integrations",
-        description: "Push action items to Slack, Asana, Jira and Trello",
-    },
-    {
-        icon: Slack,
-        title: "Slack bot Integration",
-        description: "Install our Slack Bot to ask questions and share insights",
-    },
-]
+import MagicBento from '@/components/reactbits/MagicBento'
+import React from 'react'
 
 function FeaturesSection() {
     return (
@@ -48,24 +17,19 @@ function FeaturesSection() {
                         Structured flows for summaries, decisions, tasks, and integrations. Every block is designed to turn conversation into execution.
                     </p>
                 </div>
-                <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5'>
-                    {features.map((feature, index) => (
-                        <div
-                            key={index}
-                            className={`glass-card-hover p-6 md:p-7 ${index === 0 ? 'md:col-span-2 md:min-h-[250px]' : ''}`}
-                        >
-                            <div className='w-12 h-12 rounded-xl bg-[#22131d] border border-primary/20 flex items-center justify-center mb-4'>
-                                <feature.icon className='w-6 h-6 text-primary' />
-                            </div>
-                            <h3 className='text-xl font-semibold text-white mb-2 leading-tight'>
-                                {feature.title}
-                            </h3>
-                            <p className='text-white/60 leading-relaxed'>
-                                {feature.description}
-                            </p>
-                        </div>
-                    ))}
-                </div>
+                <MagicBento
+                    textAutoHide={true}
+                    enableStars
+                    enableSpotlight
+                    enableBorderGlow={true}
+                    enableTilt={false}
+                    enableMagnetism={false}
+                    clickEffect
+                    spotlightRadius={400}
+                    particleCount={12}
+                    glowColor="200, 210, 230"
+                    disableAnimations={false}
+                />
             </div>
         </section>
     )

@@ -3,6 +3,7 @@
 import { useAuth } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import { GlobalNavbar } from "./global-navbar";
+import Footer from "./landing/Footer";
 
 export function ConditionalLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname()
@@ -10,6 +11,7 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
 
     const showFrame = !pathname.startsWith('/api')
     const isSharedMeetingView = pathname.startsWith('/meeting/') && !isSignedIn
+    const isAuthPage = pathname.startsWith('/sign-in') || pathname.startsWith('/sign-up')
 
     if (!showFrame) {
         return <>{children}</>
@@ -23,6 +25,7 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
                     {children}
                 </div>
             </main>
+            {!isAuthPage && <Footer />}
         </div>
     )
 }

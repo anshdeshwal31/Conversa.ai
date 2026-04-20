@@ -38,9 +38,9 @@ export function GlobalNavbar() {
               className='w-auto'
               ease='power2.easeOut'
               baseColor='rgba(8, 10, 14, 0.9)'
-              pillColor='rgba(34, 42, 58, 0.88)'
+              pillColor='rgba(255, 255, 255, 0.95)'
               hoveredPillTextColor='#f8fafc'
-              pillTextColor='#e9edf5'
+              pillTextColor='#08090c'
               initialLoadAnimation={false}
             />
           </div>

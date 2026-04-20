@@ -7,7 +7,6 @@ import HowItWorksSection from "./components/landing/HowItWorksSection";
 import StatsSection from "./components/landing/StatsSection";
 import MoreFeaturesSection from "./components/landing/MoreFeaturesSection";
 import CTASection from "./components/landing/CTASection";
-import Footer from "./components/landing/Footer";
 
 export default async function Home() {
   const { userId } = await auth();
@@ -25,7 +24,6 @@ export default async function Home() {
       <StatsSection />
       <MoreFeaturesSection />
       <CTASection />
-      <Footer />
     </div>
   );
 }
