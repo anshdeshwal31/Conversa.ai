@@ -23,6 +23,9 @@
 
 # production
 /build
+/lambda-chat/build/
+/lambda-function/build/
+*.zip
 
 # misc
 .DS_Store
