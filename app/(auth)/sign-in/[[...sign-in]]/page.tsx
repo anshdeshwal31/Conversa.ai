@@ -1,3 +1,4 @@
+"use client"
 import { SignIn } from '@clerk/nextjs'
 import { ArrowLeft, Orbit, ShieldCheck, Sparkles } from 'lucide-react'
 import Link from 'next/link'
@@ -18,7 +19,11 @@ const trustSignals = [
     },
 ]
 
+
+
 export default function Page() {
+
+    
     return (
         <div className='min-h-[calc(100vh-120px)] px-3 pb-8 md:px-5'>
             <div className='surface-frame ambient-panel max-w-[1320px] mx-auto p-5 sm:p-6 md:p-8 lg:p-10 relative overflow-hidden'>
@@ -33,7 +38,7 @@ export default function Page() {
                         </Link>
 
                         <div className='mt-6'>
-                            <div className='section-kicker'>
+                            <div className='section-kicker '>
                                 <Orbit className='w-3.5 h-3.5 text-primary' />
                                 Welcome back
                             </div>
