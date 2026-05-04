@@ -1,7 +1,4 @@
-![MeetingBot - AI Meeting NoteTaker](https://meetingbot3.s3.us-east-1.amazonaws.com/FULL+STACK.png)
 
-[Link to 30 hours long YouTube Tutorial](https://www.youtube.com/watch?v=5meG9KB1w0g)
-PS: Youtube only allows videos of max duration of 12 hours. But since my video is 30 hours long, I uploaded it as 3 different parts. The link above is of the first part(2nd and 3rd parts of tutorial link in description of the above video)
 
 ## Upcoming Features
 
@@ -75,8 +72,6 @@ Hi 🐶, In this project, you'll build MeetingBot, a comprehensive open-source m
 
 - 🎯 Custom bot personalization with name changes and profile image uploads
 
-- 📧 Post-meeting automated email notifications using Resend integration
-
 - 🗄️ Efficient database management with Prisma ORM
 
 - 🔔 Real-time notifications using Sonner toast system
@@ -116,8 +111,7 @@ Follow these steps to get MeetingBot running locally on your machine:
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/cooldude6000/meeting-bot69.git
-   cd meeting-bot69
+   git clone https://github.com/anshdeshwal31/Conversa.ai.git
    ```
 
 2. **Install dependencies**
